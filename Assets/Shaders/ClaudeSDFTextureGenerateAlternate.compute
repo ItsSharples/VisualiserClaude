@@ -1,0 +1,148 @@
+#pragma kernel CSMain
+#pragma kernel CSBlankTexture
+
+#include "Assets/Scripts/Compute Common/GeoMath.hlsl"
+
+struct Boundary {
+	uint index;
+	uint elevationIndex;
+	float longitude;
+	float latitude;
+
+	float u;
+	float v;
+};
+
+RWTexture2D<float4> OutTexture;
+/// Lat, Long, Index, GndTmp
+StructuredBuffer<float4> Pixels;
+StructuredBuffer<Boundary> Boundaries;
+
+const uint pixel_count;
+const uint boundary_count;
+
+const uint width = 360;
+const uint height = 181;
+
+static const float thresholdDistance = 1.5f;
+static const float halfPI = PI / 2.0f;
+
+static const float sphereRadius = 2.0f;
+static const float pointDistance = 0.031250f;
+static const float floatEpsilon = 0.00000001f;
+
+//float geodesicDistance(vec3 a, vec3 b) {
+//	return atan(length(cross(a, b)) / dot(a, b));
+//}
+
+[numthreads(1,1,64)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+	float4 pointData = Pixels[id.z];
+	float latitude = pointData.x;
+	float longitude = pointData.y;
+	float index = pointData.z;
+	float gndTmp = pointData.w;
+
+	float3 pointLongLat = float3(longitude, latitude - halfPI, sphereRadius);
+	float3 pointVector = longitudeLatitudeToPoint(pointLongLat.xy);
+
+	//if (id.x > 0) { return; }
+	float4 oldData = OutTexture[id.xy];
+	if (oldData.a != 1) {
+		OutTexture[id.xy] = float4(id.x, id.y, id.z, 1);
+	}
+
+	
+	return;
+
+	float atPointIndex = 0;
+	float atPoint = 0;
+	[loop]
+	for (uint x = 0; x < width; x++) {
+		for (uint y = 0; y < height; y++) {
+
+			int i = y * width + x;
+
+			//float pixel_lat_rad = radians(adjusted_latitude);
+			float2 xy = float2(x, y);
+			float2 uv = xy / float2(width, height);
+
+			const float3 pixelLongLat = float3(uvToLongitudeLatitude(uv), sphereRadius);// float2(radians(id.x - width / 2), radians(id.y));
+			const float3 pixelVector = longitudeLatitudeToPoint(pixelLongLat.xy);
+
+			//float minDistance = defaultDistance;
+			//float currIndex = 1;
+
+
+			float dist = distance(pixelLongLat.xy, pointLongLat.xy);
+			//float dist = atan(length(cross(pixelVector, pointVector)) / dot(pixelVector, pointVector));
+
+			OutTexture[xy] = float4(id.x, id.y, id.z, x / (float)width);
+			continue;
+			
+			float4 oldData = OutTexture[xy];
+			if (dist < thresholdDistance){//< floatEpsilon) {
+
+				if (oldData.w == 0) {
+					OutTexture[xy] = float4(dist, index, 0, 1);
+					continue;
+				}
+				if (dist - oldData.x < floatEpsilon) {
+					OutTexture[xy] = float4(dist, index, 0, 1);
+					continue;
+				}
+				//atPointIndex = 1.0f;
+			}
+		}
+	}
+	return;
+}
+
+[numthreads(8,8,1)]
+void CSBlankTexture(uint3 id : SV_DispatchThreadID)
+{
+	if ((uint)id.x >= width || (uint)id.y >= height) { return; }
+
+	OutTexture[id.xy] = float4(thresholdDistance * 1000, -1 , 0, 0);
+}
+/*
+	[loop]
+	for (uint point_index = 0; point_index < boundary_count; point_index++) {
+		Boundary boundaryVector = Boundaries[point_index];
+		float latitude = boundaryVector.latitude;
+		float longitude = boundaryVector.longitude;
+		float index = boundaryVector.index;
+		float3 boundaryLongLat = float3(longitude, latitude - halfPI, sphereRadius);
+
+		float dist = distance(pixelLongLat.xy, boundaryLongLat.xy);
+
+
+		//if (dist < minDistance) {
+		//	minDistance = dist;
+		//	currIndex = index;
+		//}
+
+		if (dist - pointDistance < floatEpsilon) {
+			atPoint = 1.0f;
+		}
+	}
+	Boundary closestBoundary = Boundaries[currIndex];
+	float4 closestPixel = Pixels[currIndex];
+	float2 windSpeed = float2(closestBoundary.u, closestBoundary.v);
+	float groundTmp = closestPixel.w;
+
+
+	// Modify wind vector to behave better around poles.
+	// TODO: figure out better solution!
+	//float2 uv = float2(x, y) / float2(width - 1, height - 1);
+	float2 longLat = uvToLongitudeLatitude(uv);
+	float mag = length(windSpeed);
+	windSpeed.x /= max(0.001, cos(longLat.y));
+	windSpeed = normalize(windSpeed) * mag;
+
+	//OutTexture[id.xy] = float4(groundTmp, atPoint, closestPixel.z, atPointIndex);
+		//float4(saturate(minDistance), currIndex / pixel_count, atPoint, atPointIndex);
+
+}
+*/

@@ -1,0 +1,147 @@
+#pragma kernel Init
+#pragma kernel Update
+
+#include "Assets/Scripts/Compute Common/GeoMath.hlsl"
+
+struct Particle {
+	float3 position;
+	float3 velocity;
+	float lifeT;
+};
+
+Texture2D<float2> WindMap;
+SamplerState my_linear_repeat_sampler;
+
+RWStructuredBuffer<Particle> Particles;
+uint numParticles;
+float deltaTime;
+float speedScale;
+float lifeSpan;
+
+
+
+float3 getWindVector(float3 p) {
+	float2 longLat = pointToLongitudeLatitude(normalize(p));
+	float2 uv = longitudeLatitudeToUV(longLat);
+	float2 f = WindMap.SampleLevel(my_linear_repeat_sampler, uv, 0);
+	float3 p2 = longitudeLatitudeToPoint(longLat + normalize(f) * 0.001);
+	return normalize(p2 - p) * length(f);
+}
+
+
+
+void InitParticle(int i) {
+	uint3 currentPos = Particles[i].position * 10000 + 20000;
+	uint seed = hash(i) ^ hash(currentPos.x) ^ hash(currentPos.y) ^ hash(currentPos.z);
+
+	float3 newPos = randomPointOnSphere(seed);
+	float3 velocity = getWindVector(newPos);
+	Particles[i].position = newPos;
+	Particles[i].velocity = velocity;
+	Particles[i].lifeT = 0;
+}
+
+
+[numthreads(64,1,1)]
+void Init (uint3 id : SV_DispatchThreadID)
+{
+	if (id.x >= numParticles) { return; }
+	uint seed = id.x;
+	InitParticle(id.x);
+	Particles[id.x].lifeT = randomValue(seed);
+}
+
+[numthreads(64,1,1)]
+void Update (uint3 id : SV_DispatchThreadID)
+{
+	if (id.x >= numParticles) { return; }
+
+	Particle particleOld = Particles[id.x];
+	
+	float3 velocity = getWindVector(Particles[id.x].position);
+
+	Particles[id.x].position = normalize(particleOld.position + velocity * deltaTime * speedScale);
+	Particles[id.x].velocity = velocity;
+	Particles[id.x].lifeT += deltaTime / lifeSpan;
+
+	if (Particles[id.x].lifeT > 1) {
+		InitParticle(id.x);
+	}
+
+	//Particles[id.x].position += normalize(particleOld.position) * particleOld.speed * deltaTime;
+}
+
+
+// SuperFastHash, adapated from http://www.azillionmonkeys.com/qed/hash.html
+uint hash4To1(uint4 data)
+{
+	uint hash = 8u, tmp;
+
+	hash += data.x & 0xffffu;
+	tmp = (((data.x >> 16) & 0xffffu) << 11) ^ hash;
+	hash = (hash << 16) ^ tmp;
+	hash += hash >> 11;
+
+	hash += data.y & 0xffffu;
+	tmp = (((data.y >> 16) & 0xffffu) << 11) ^ hash;
+	hash = (hash << 16) ^ tmp;
+	hash += hash >> 11;
+
+	hash += data.z & 0xffffu;
+	tmp = (((data.z >> 16) & 0xffffu) << 11) ^ hash;
+	hash = (hash << 16) ^ tmp;
+	hash += hash >> 11;
+
+	hash += data.w & 0xffffu;
+	tmp = (((data.w >> 16) & 0xffffu) << 11) ^ hash;
+	hash = (hash << 16) ^ tmp;
+	hash += hash >> 11;
+
+	/* Force "avalanching" of final 127 bits */
+	hash ^= hash << 3;
+	hash += hash >> 5;
+	hash ^= hash << 4;
+	hash += hash >> 17;
+	hash ^= hash << 25;
+	hash += hash >> 6;
+
+	return hash;
+}
+
+
+
+
+/*
+void respawnParticle(int i) {
+	// Generate seed based on particle's index and position
+	uint4 seed4D = uint4(i, (Particles[i].position + 1) * 100000);
+	uint randomState = hash4To1(seed4D);
+	// Set position to random point on sphere and reset the remaining lifetime
+	Particles[i].position = randomPointOnSphere(randomState);
+	Particles[i].remainingLifetime = particleDuration;
+}
+
+float3 getWindVelocity(float3 pos) {
+	// Look up velocity vector and convert from 2D to 3D
+	float2 coord = pointToCoord(normalize(pos));
+	float2 velocity2D = WindData.SampleLevel(linear_clamp_sampler, coordToTexCoord(coord), 0);
+	float2 nextCoord = coord + normalize(velocity2D) * 0.001;
+	float3 nextPos = coordToPoint(nextCoord);
+	return normalize(nextPos - pos) * length(velocity2D);
+}
+
+[numthreads(64,1,1)]
+void UpdateParticle (uint3 id : SV_DispatchThreadID) {
+	// Update particle's position and lifetime
+	float3 pos = Particles[id.x].position;
+	float3 velocity = getWindVelocity(pos);
+	Particles[id.x].position = normalize(pos + velocity * deltaTime);
+	Particles[id.x].remainingLifetime -= deltaTime;
+
+	// Respawn particle once lifetime reaches zero
+	if (Particles[id.x].remainingLifetime <= 0) {
+		respawnParticle(id.x);
+	}
+}
+*/
+

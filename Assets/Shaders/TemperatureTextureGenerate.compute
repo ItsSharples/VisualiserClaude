@@ -1,0 +1,26 @@
+#pragma kernel CSMain
+
+#include "Assets/Scripts/Wind Vis/Shaders/GetColourHotToCold.hlsl"
+
+RWTexture2D<float4> TemperatureTexture;
+StructuredBuffer<float> Temperatures;
+static const int width = 360;
+static const int height = 181;
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+	if ((int)id.x >= width || (int)id.y >= height) { return; }
+
+	// Get temperature
+	int x = (id.x + width/2)%width;
+	int y = height - 1 - id.y;
+	int i = y * width + x;
+	float temperature = Temperatures[i];
+
+
+	float3 colour = GetColourHotToCold(temperature, 180, 340);
+	// Roughly the peak temperatures in Kelvin
+	TemperatureTexture[id.xy] = float4(colour, 1.0f);
+
+}

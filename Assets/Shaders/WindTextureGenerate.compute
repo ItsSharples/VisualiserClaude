@@ -1,0 +1,31 @@
+#pragma kernel CSMain
+
+#include "Assets/Scripts/Compute Common/GeoMath.hlsl"
+
+RWTexture2D<float2> WindTexture;
+StructuredBuffer<float2> WindVectors;
+static const int width = 360;
+static const int height = 181;
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+	if ((int)id.x >= width || (int)id.y >= height) { return; }
+
+	// Get wind vector
+	int x = (id.x + width/2)%width;
+	int y = height - 1 - id.y;
+	int i = y * width + x;
+	float2 windVector = WindVectors[i];
+
+	// Modify wind vector to behave better around poles.
+	// TODO: figure out better solution!
+	float2 uv = float2(x,y) / float2(width-1,height-1);
+	float2 longLat = uvToLongitudeLatitude(uv);
+	float mag = length(windVector);
+	windVector.x /= max(0.001, cos(longLat.y));
+	windVector = normalize(windVector) * mag;
+
+	WindTexture[id.xy] = windVector;
+
+}

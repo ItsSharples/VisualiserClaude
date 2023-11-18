@@ -1,0 +1,26 @@
+#pragma kernel CSMain
+
+//#include "Assets/Scripts/Compute Common/GeoMath.hlsl"
+
+RWTexture2D<float2> TextureA;
+RWTexture2D<float2> TextureB;
+RWTexture2D<float2> TextureOut;
+
+uniform const float mixStr = 0.5;
+uniform const int width = 360;
+uniform const int height = 181;
+
+[numthreads(8, 8, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+	if ((int)id.x >= width || (int)id.y >= height) { return; }
+
+	// Get vectors
+	float2 vectorA = TextureA[id.xy];
+	float2 vectorB = TextureB[id.xy];
+
+	float2 motionVector = float2(vectorA.x - vectorB.x, vectorA.y - vectorB.y);
+	float2 interpolatedVector = lerp(vectorA, vectorB, mixStr);
+	TextureOut[id.xy] = interpolatedVector;
+
+}

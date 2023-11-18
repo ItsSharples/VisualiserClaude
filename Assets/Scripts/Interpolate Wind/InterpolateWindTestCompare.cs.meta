@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 8d9acf6153b440b4f9dbfc8d89b5d90f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - generateCompute: {instanceID: 0}
+  - interpolateCompute: {instanceID: 0}
+  - compareCompute: {instanceID: 0}
+  - textureA: {fileID: 8400000, guid: 7ee52fba9f0e7234c969ee42ebd8479a, type: 2}
+  - textureB: {fileID: 8400000, guid: 6c412a5371297d74390890bfdacc7063, type: 2}
+  - compareTexture: {fileID: 8400000, guid: c14d5fb48f3d0e14eaa3128dfe9803c9, type: 2}
+  - outTexture: {fileID: 8400000, guid: eb6c907716f820a4ba2f9495dd742785, type: 2}
+  - diffTexture: {fileID: 8400000, guid: 1972b7ec4242e9c42bbc286786418209, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,86 @@
+#pragma kernel CSMain
+
+#include "Assets/Scripts/Compute Common/GeoMath.hlsl"
+
+RWTexture2D<float4> OutTexture;
+/// Lat, Long, Index
+StructuredBuffer<float3> Points;
+const uint point_count;
+const uint width = 360;
+const uint height = 181;
+static const int defaultDistance = 1000000;
+static const float halfPI = PI / 2.0f;
+
+float distanceByHaversine(float2 ALongLat, float2 BLongLat) {
+
+	float ALong = ALongLat.x;
+	float BLong = BLongLat.x;
+	float ALat = ALongLat.y;
+	float BLat = BLongLat.y;
+	float deltaLong = BLong - ALong;
+	float deltaLat = BLat - ALat;
+
+	float a = pow(sin(deltaLat / 2.0), 2) + cos(ALat) * cos(BLat) * pow(sin(deltaLong / 2.0), 2);
+	float c = 2 * atan2(sqrt(a), sqrt(1 - a));
+
+	return c;
+}
+
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+	if ((uint)id.x >= width || (uint)id.y >= height) { return; }
+
+	int x = (id.x + width / 2) % width;
+	int y = height - 1 - id.y;
+	int i = y * width + x;
+
+	//float pixel_lat_rad = radians(adjusted_latitude);
+	float2 uv = float2(id.x, id.y) / float2(width, height);
+
+
+	float sphereRadius = 50.0f;
+	float3 pixelLongLat = float3(uvToLongitudeLatitude(uv), sphereRadius);// float2(radians(id.x - width / 2), radians(id.y));
+	
+
+	float minDistance = defaultDistance;
+	float currIndex = 1;
+	float pointDistance = 0.031250f;
+
+	float atPointIndex = 0;
+	float atPoint = 0;
+	[loop]
+	for (uint point_index = 0; point_index < point_count; point_index++) {
+		float3 pointVector = Points[point_index];
+		float latitude = pointVector.x;
+		float longitude = pointVector.y;
+		float index = pointVector.z;
+		float3 pointLongLat = float3(longitude, latitude - halfPI, sphereRadius);
+
+		float dist = distance(pixelLongLat.xy, pointLongLat.xy);
+
+		//float alt_dist = acos(dot(pixelLongLat.xy, pointLongLat.xy));
+		//float alt_dist = atan((length((cross(pixelLongLat, pointLongLat)))) / (dot(pixelLongLat, pointLongLat))) * sphereRadius;
+		//dist -= alt_dist;
+		//Mathf.Atan((Vector3.Magnitude((Vector3.Cross(point1, point2)))) / (Vector3.Dot(point1, point2)));
+		
+		//float dist = distanceByHaversine(pixelLongLat, pointLongLat);
+		//dist = min(backDist, dist);
+		if (dist < minDistance) {
+			minDistance = dist;
+			currIndex = index;
+		}
+
+		if (dist < pointDistance) {
+			atPoint = 1.0f;
+			atPointIndex = index / point_count;
+		}
+
+		//float2 uv = float2(x, y) / float2(width - 1, height - 1);
+	}
+
+	//float3 colour = float3(minDistance, currIndex / point_count, 0);
+	OutTexture[id.xy] = float4(saturate(minDistance), currIndex / point_count, atPoint, atPointIndex);// float4(colour, 0.5f);
+
+}
