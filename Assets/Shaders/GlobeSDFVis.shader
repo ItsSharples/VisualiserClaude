@@ -5,6 +5,7 @@ Shader "Unlit/GlobeSDFVis"
 		_MainTex("SDF Texture", 2D) = "white" {}
 		_OverlayTex("Overlay Texture", 2D) = "white" {}
 		_OverlayStr("Overlay Strength", Range(0.0, 1.0)) = 0.0
+		_TextureStr("Texture Strength", Range(0.0, 1.0)) = 1.0
 		_MaxWind("Max Wind", Range(0.0, 1.0)) = 0.0
 
 		_MinTemp("Min Temp", Range(0.0, 400)) = 273
@@ -43,11 +44,14 @@ Shader "Unlit/GlobeSDFVis"
 			};
 
 			sampler2D _MainTex;
+			sampler2D _OverlayTex;
+			
+			float _OverlayStr;
+			float _TextureStr;
+
 			float  _MaxWind;
 			float _MinTemp;
 			float _MaxTemp;
-			sampler2D _OverlayTex;
-			float _OverlayStr;
 
 			float4 _MainTex_ST;
 			float4 _OverlayTex_ST;
@@ -118,7 +122,23 @@ Shader "Unlit/GlobeSDFVis"
 			{
 				float2 longLat = pointToLongitudeLatitude(normalize(i.pos));
 				float2 uv = longitudeLatitudeToUV(longLat);
+				float4 sdfValue = tex2D(_MainTex, TRANSFORM_TEX(uv, _MainTex)).rgba;
+				float3 colour = GetColourHotToCold(sdfValue.g, _MinTemp, _MaxTemp);
+
+				float3 overlayCol = tex2D(_OverlayTex, TRANSFORM_TEX(uv, _OverlayTex)).rgb;
+				float3 lerpedColour = lerp(colour, overlayCol, _OverlayStr);
+
+				float3 lerpedStrength = lerp(_White, lerpedColour, _TextureStr);
+
+				return float4(lerpedStrength, 1);
+			}
+			/*
+
+				//float2 longLat = pointToLongitudeLatitude(normalize(i.pos));
+				//float2 uv = longitudeLatitudeToUV(longLat);
 				float4 pixel = tex2D(_MainTex, TRANSFORM_TEX(uv, _MainTex)).rgba;
+
+
 				return float4(GetColourHotToCold(pixel.g, _MinTemp, _MaxTemp), 1);
 
 
@@ -135,16 +155,19 @@ Shader "Unlit/GlobeSDFVis"
 				//float2 uv = longitudeLatitudeToUV(longLat);
 				//float2 uv = pointToUV(normalize(i.pos));
 				float4 temperatureCol = tex2D(_MainTex, TRANSFORM_TEX(uv, _MainTex)).rgba;
-				//float3 overlayCol = tex2D(_OverlayTex, TRANSFORM_TEX(uv, _OverlayTex));
+				float3 colour = GetColourHotToCold(temperatureCol.r, _MinTemp, _MaxTemp);
+				
+				float3 overlayCol = tex2D(_OverlayTex, TRANSFORM_TEX(uv, _OverlayTex)).rgb;
 
 				//float m = length(temperatureCol.g) / _MaxWind;
 				//float3 adjCol = lerp(_Black, _White, saturate(m));
 				//float3 adjCol = float3(length(temperatureCol.rg) * 10.0f,0, 0);// temperatureCol.b / 4.0f + temperatureCol.a);
-				//float3 col = lerp(adjCol, overlayCol, _OverlayStr);
+				
+				float3 lerpedColour = lerp(colour, overlayCol, _OverlayStr);
 
-				float3 colour = GetColourHotToCold(temperatureCol.r, _MinTemp, _MaxTemp);
-				return float4(colour, 1);
+				return float4(lerpedColour, 1);
 			}
+			*/
 			ENDCG
 		}
 	}

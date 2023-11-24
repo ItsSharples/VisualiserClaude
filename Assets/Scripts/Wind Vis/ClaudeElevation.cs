@@ -6,6 +6,7 @@ using UnityEngine;
 public class ClaudeElevation : MonoBehaviour
 {
 	public float elevation;
+	public bool enableUpdates = true;
 
 	[HideInInspector]
 	public ElevationConfig config;

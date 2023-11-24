@@ -57,7 +57,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 1.66, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Map:
         m_Texture: {fileID: 2800000, guid: 3b6b093e69b1feb4ea74c84913a54215, type: 3}
@@ -80,9 +80,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OverlayTex:
-        m_Texture: {fileID: 2800000, guid: b431501e52c4a634685c3757d53e6a44, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9f0850552727a1e46b24c1dc387801eb, type: 3}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Offset: {x: -1.89, y: 0}
     - _ParallaxMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -111,6 +111,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _TextureStr: 1
     - _UVSec: 0
     - _WindMax: 23
     - _ZWrite: 1
@@ -128,5 +129,5 @@ Material:
     - _ShallowBlueA: {r: 1, g: 1, b: 1, a: 1}
     - _ShallowBlueB: {r: 0, g: 0, b: 0, a: 1}
     - _TestParams: {r: 22.3, g: 0, b: 0, a: 0}
-    - _White: {r: 1, g: 1, b: 1, a: 1}
+    - _White: {r: 0.5566038, g: 0.5566038, b: 0.5566038, a: 1}
   m_BuildTextureStacks: []

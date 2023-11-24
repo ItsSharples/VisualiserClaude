@@ -9,14 +9,19 @@ public class CameraConfig : ScriptableObject
 {
     private const float Tau = 2 * Mathf.PI;
     private const float halfPI = Mathf.PI / 2;
-	[Range(-halfPI, halfPI)]
+    private const float justLessThanHalfPI = halfPI - 0.001f;
+	[Range(-justLessThanHalfPI, justLessThanHalfPI)]
     public float latitude;
-    [Range(0f, Tau)]
+    [Range(-Tau, 2 * Tau)]
 	public float longitude;
-    public float altitude;
 
-    private float adjusted_lat => latitude;
-    private float adjusted_lon => longitude - Mathf.PI;
+    public float mappedLatitude => latitude;
+	public float mappedLongitude => longitude % Tau;
+
+	public float altitude;
+
+    private float adjusted_lat => mappedLatitude;
+    private float adjusted_lon => mappedLongitude - Mathf.PI;
 
 	private float cos(float x) => Mathf.Cos(x);
 	private float sin(float x) => Mathf.Sin(x);

@@ -146,8 +146,11 @@ public class ClaudeWindParticles : MonoBehaviour
 				}
 			}
 		}
-		//numBuffers = numLayers;
-		//Debug.Log(numBuffers);
+
+		foreach (var (height, elevation) in elevationDict)
+		{
+			InitElevation(elevation);
+		}
 	}
 
 	/*
@@ -187,8 +190,11 @@ public class ClaudeWindParticles : MonoBehaviour
 		{
 			foreach (var (elevation, elevationObject) in elevationDict)
 			{
-				UpdateElevation(elevationObject);// Update(elevation: elevation);
-				Graphics.DrawMeshInstancedIndirect(mesh, 0, elevationObject.particleMaterial, bounds, argsBuffer);
+				if(elevationObject.enableUpdates)
+				{
+					UpdateElevation(elevationObject);// Update(elevation: elevation);
+					Graphics.DrawMeshInstancedIndirect(mesh, 0, elevationObject.particleMaterial, bounds, argsBuffer);
+				}
 			}
 		}
 
@@ -304,5 +310,21 @@ public class ClaudeWindParticles : MonoBehaviour
 		public Vector3 position;
 		public Vector3 velocity;
 		public float lifeT;
+	}
+
+	public void DisableAllLayers()
+	{
+		foreach(var (elevation, objec) in elevationDict)
+		{
+			objec.enableUpdates = false;
+		}
+	}
+
+	public void EnableAllLayers()
+	{
+		foreach (var (elevation, objec) in elevationDict)
+		{
+			objec.enableUpdates = true;
+		}
 	}
 }

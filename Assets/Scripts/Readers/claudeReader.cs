@@ -127,11 +127,33 @@ public class claudeReader : MonoBehaviour
 			var value = property.Value;
 			var value_type = property.Value.Type;
 			//Debug.Log($"{child.Path}, Values: {child.Values().Count()}");
-			Debug.Log($"{property.Path}, {value_type}" +
-				$"{(value_type.Equals(JTokenType.Array) ? $", {value.Count()}, {value[0].Count()}" : "")}" +
-				$"{(value is IComparable ? $", Min: {value.Min()}, Max: {value.Max()}" : "")}" +
-				$"{((value_type.Equals(JTokenType.Array)) ? (value[0] is IComparable ? $", Min[0]: {value.Min()}, Max[0]: {value.Max()}" : "") : "")}" +
-				$", {value}");
+			float closestToZero = -1;
+			if (value_type.Equals(JTokenType.Array))
+			{
+				if (value[0].Type.Equals(JTokenType.Array))
+				{
+					if (value[0][0] is IComparable)
+					{
+						//Debug.Log($"Comparing: {property.Path}");
+						var orderedBySmallest = value[0].OrderBy((item) =>
+						{
+							return Math.Abs((float)item);
+						});
+						closestToZero = (float)orderedBySmallest.First();
+						var verySmalls = orderedBySmallest.TakeWhile(token => (float)token < 1e-4);
+						Debug.Log($"{property.Path} has {verySmalls.Count()} very small values");
+					}
+				}
+			}
+
+			Debug.Log(	$"{property.Path}, {value_type}" +
+						$"{(value_type.Equals(JTokenType.Array) ? $", {value.Count()}, {value[0].Count()}" : "")}" +
+						$"{(value is IComparable ? $", Min: {value.Min()}, Max: {value.Max()}" : "")}" +
+						$"{((value_type.Equals(JTokenType.Array)) ? (value[0] is IComparable ? $", Min[0]: {value.Min()}, Max[0]: {value.Max()}" : "") : "")}" +
+						$"{((value_type.Equals(JTokenType.Array)) ? (value[0].Type.Equals(JTokenType.Array) ? (value[0][0] is IComparable ? $", Min[0][0]: {value[0].Min()}, Max[0][0]: {value[0].Max()}" : "") : "") : "")}" +
+						$", Smallest Value: {closestToZero}" +
+						$", {value}");
+
 
 
 			switch (property.Path)
