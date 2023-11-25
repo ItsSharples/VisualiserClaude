@@ -118,5 +118,5 @@ void GenerateTextureWindspeed(uint3 id : SV_DispatchThreadID)
 		}
 	}
 	Boundary closestBoundary = Boundaries[currIndex];
-	OutTexture[xy] = float4(closestBoundary.u, closestBoundary.v, length(float2(closestBoundary.u, closestBoundary.v)), closestBoundary.index);
+	OutTexture[xy] = float4(closestBoundary.u, closestBoundary.v, abs(closestBoundary.v), closestBoundary.index);
 }

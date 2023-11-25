@@ -10,6 +10,7 @@ using UnityEditor;
 using System;
 using UnityEngine.Analytics;
 using UnityEngine.Assertions;
+using System.Runtime.InteropServices;
 
 struct claudePixel
 {
@@ -35,6 +36,7 @@ struct claudeBoundary
 	
 }
 
+[StructLayout(LayoutKind.Sequential, Pack = 0)]
 struct boundaryData
 {
 	public uint index;
@@ -67,6 +69,7 @@ public class claudeReader : MonoBehaviour
 	public ComputeShader windCompute;
 	public RenderTexture texture;
 	public MeshRenderer globe;
+	public MeshRenderer debugGlobe;
 
     public string filePath;
 
@@ -78,6 +81,9 @@ public class claudeReader : MonoBehaviour
 	public uint numBoundaries;
 	public int boundaryCount;
 	public int elevationCount;
+
+
+
 
 	public IEnumerable<float> GetElevations()
 	{
@@ -103,6 +109,7 @@ public class claudeReader : MonoBehaviour
 	}
 	public ComputeBuffer GetBoundariesForElevation(float elevation)
 	{
+		if (BufferDictionary != null)
 		if (BufferDictionary.TryGetValue(elevation, out var buffer)) { return buffer; }
 		Debug.LogWarning($"Couldn't Fetch Boundary for: {elevation}");
 		return null;
@@ -110,6 +117,7 @@ public class claudeReader : MonoBehaviour
 	}
 	public RenderTexture WindTextureForElevation(float elevation)
 	{
+		if (TextureDictionary != null)
 		if (TextureDictionary.TryGetValue(elevation, out var texture)) { return texture; }
 		return null;
 	}
@@ -122,7 +130,10 @@ public class claudeReader : MonoBehaviour
 
 	private void Start()
 	{
-		LoadFile();
+		if (!isLoaded)
+		{
+			LoadFile();
+		}
 		UpdateMaterials();
 	}
 
@@ -389,6 +400,7 @@ public class claudeReader : MonoBehaviour
 			elevationLookup.Add(elevation);
 
 			outTexture = ComputeHelper.CreateRenderTexture(width, height, FilterMode.Bilinear, format, "SDF WindSpeed Map");
+			outTexture.wrapMode = TextureWrapMode.Repeat;
 
 			windCompute.SetInt("width", width);
 			windCompute.SetInt("height", height);

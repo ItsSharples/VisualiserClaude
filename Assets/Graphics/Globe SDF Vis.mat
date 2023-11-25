@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Globe SDF Vis
-  m_Shader: {fileID: 4800000, guid: c8cb371f4f5fb574896cdf3201e07b40, type: 3}
+  m_Shader: {fileID: 4800000, guid: b6811997a948ef1448736df33532a1b0, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -58,7 +58,7 @@ Material:
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: -0.5, y: 0}
+        m_Offset: {x: 0, y: 0}
     - _Map:
         m_Texture: {fileID: 2800000, guid: 3b6b093e69b1feb4ea74c84913a54215, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -100,10 +100,10 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _MaxTemp: 376
+    - _MaxTemp: 0.025
     - _MaxWind: 0
     - _Metallic: 0
-    - _MinTemp: 256
+    - _MinTemp: -0.01
     - _Mode: 0
     - _OcclusionStrength: 1
     - _OverlayStr: 0

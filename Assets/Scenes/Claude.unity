@@ -138,28 +138,13 @@ MonoBehaviour:
   heightScale: 7
   particleScale: 2
   particleColour: {r: 0, g: 0.8908212, b: 1, a: 1}
---- !u!114 &177229818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3daf846260bc5964dbaecadf8040f72e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  heightScale: 4
-  particleScale: 2
-  particleColour: {r: 0.64027286, g: 1, b: 0, a: 1}
---- !u!84 &220270873
+--- !u!84 &59261960
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SDF Map
+  m_Name: SDF WindSpeed Map
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -191,7 +176,75 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!21 &295337043
+--- !u!84 &171027224
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SDF WindSpeed Map
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 2880
+  m_Height: 1448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 0
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!114 &177229818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3daf846260bc5964dbaecadf8040f72e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heightScale: 4
+  particleScale: 2
+  particleColour: {r: 0.64027286, g: 1, b: 0, a: 1}
+--- !u!114 &265662549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3daf846260bc5964dbaecadf8040f72e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heightScale: 0
+  particleScale: 2
+  particleColour: {r: 1, g: 1, b: 1, a: 1}
+--- !u!21 &277231058
 Material:
   serializedVersion: 8
   m_ObjectHideFlags: 0
@@ -217,9 +270,9 @@ Material:
     m_Ints: []
     m_Floats: []
     m_Colors:
-    - _particleColour: {r: 1, g: 0, b: 0, a: 1}
+    - _particleColour: {r: 0, g: 1, b: 0.645576, a: 1}
   m_BuildTextureStacks: []
---- !u!21 &465806443
+--- !u!21 &305199213
 Material:
   serializedVersion: 8
   m_ObjectHideFlags: 0
@@ -247,7 +300,7 @@ Material:
     m_Colors:
     - _particleColour: {r: 0.37375546, g: 0, b: 1, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &480919546
+--- !u!114 &322853755
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -259,10 +312,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3daf846260bc5964dbaecadf8040f72e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heightScale: 8
+  heightScale: 12
   particleScale: 2
-  particleColour: {r: 0, g: 0.43849897, b: 1, a: 1}
---- !u!21 &671002584
+  particleColour: {r: 1, g: 1, b: 1, a: 1}
+--- !u!21 &327543099
 Material:
   serializedVersion: 8
   m_ObjectHideFlags: 0
@@ -288,37 +341,47 @@ Material:
     m_Ints: []
     m_Floats: []
     m_Colors:
-    - _particleColour: {r: 1, g: 0.976174, b: 0, a: 1}
+    - _particleColour: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
---- !u!21 &707182641
-Material:
-  serializedVersion: 8
+--- !u!84 &382911895
+RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Instanced/Particle
-  m_Shader: {fileID: 4800000, guid: f5a04ecee56bf5a41bff2cbbad573de4, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 1
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs: []
-    m_Ints: []
-    m_Floats: []
-    m_Colors:
-    - _particleColour: {r: 0.64027286, g: 1, b: 0, a: 1}
-  m_BuildTextureStacks: []
---- !u!21 &710418950
+  m_Name: SDF WindSpeed Map
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 2880
+  m_Height: 1448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 0
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!21 &408239142
 Material:
   serializedVersion: 8
   m_ObjectHideFlags: 0
@@ -346,7 +409,220 @@ Material:
     m_Colors:
     - _particleColour: {r: 1, g: 0, b: 0.8365736, a: 1}
   m_BuildTextureStacks: []
---- !u!21 &797601895
+--- !u!114 &480919546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3daf846260bc5964dbaecadf8040f72e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heightScale: 8
+  particleScale: 2
+  particleColour: {r: 0, g: 0.43849897, b: 1, a: 1}
+--- !u!21 &481931307
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Instanced/Particle
+  m_Shader: {fileID: 4800000, guid: f5a04ecee56bf5a41bff2cbbad573de4, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats: []
+    m_Colors:
+    - _particleColour: {r: 1, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
+--- !u!21 &519795160
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Instanced/Particle
+  m_Shader: {fileID: 4800000, guid: f5a04ecee56bf5a41bff2cbbad573de4, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats: []
+    m_Colors:
+    - _particleColour: {r: 0.64027286, g: 1, b: 0, a: 1}
+  m_BuildTextureStacks: []
+--- !u!84 &532364639
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SDF WindSpeed Map
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 2880
+  m_Height: 1448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 0
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &546384920
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SDF WindSpeed Map
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 2880
+  m_Height: 1448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 0
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &590693409
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SDF WindSpeed Map
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 2880
+  m_Height: 1448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 0
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!21 &592171938
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Instanced/Particle
+  m_Shader: {fileID: 4800000, guid: f5a04ecee56bf5a41bff2cbbad573de4, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats: []
+    m_Colors:
+    - _particleColour: {r: 0.6476979, g: 0, b: 1, a: 1}
+  m_BuildTextureStacks: []
+--- !u!21 &688681300
 Material:
   serializedVersion: 8
   m_ObjectHideFlags: 0
@@ -374,22 +650,35 @@ Material:
     m_Colors:
     - _particleColour: {r: 0, g: 0.43849897, b: 1, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &1063550539
-MonoBehaviour:
+--- !u!21 &721951307
+Material:
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3daf846260bc5964dbaecadf8040f72e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  heightScale: 6
-  particleScale: 2
-  particleColour: {r: 0, g: 1, b: 0.645576, a: 1}
---- !u!21 &1151942530
+  m_Name: Instanced/Particle
+  m_Shader: {fileID: 4800000, guid: f5a04ecee56bf5a41bff2cbbad573de4, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats: []
+    m_Colors:
+    - _particleColour: {r: 1, g: 0.976174, b: 0, a: 1}
+  m_BuildTextureStacks: []
+--- !u!21 &897014775
 Material:
   serializedVersion: 8
   m_ObjectHideFlags: 0
@@ -416,6 +705,219 @@ Material:
     m_Floats: []
     m_Colors:
     - _particleColour: {r: 0, g: 0.8908212, b: 1, a: 1}
+  m_BuildTextureStacks: []
+--- !u!21 &922314249
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Instanced/Particle
+  m_Shader: {fileID: 4800000, guid: f5a04ecee56bf5a41bff2cbbad573de4, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats: []
+    m_Colors:
+    - _particleColour: {r: 0.04460168, g: 1, b: 0, a: 1}
+  m_BuildTextureStacks: []
+--- !u!84 &962472502
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SDF WindSpeed Map
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 2880
+  m_Height: 1448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 0
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1052212384
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SDF WindSpeed Map
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 2880
+  m_Height: 1448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 0
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!114 &1063550539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3daf846260bc5964dbaecadf8040f72e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heightScale: 6
+  particleScale: 2
+  particleColour: {r: 0, g: 1, b: 0.645576, a: 1}
+--- !u!84 &1072888657
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SDF WindSpeed Map
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 2880
+  m_Height: 1448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 0
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!21 &1129953817
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Instanced/Particle
+  m_Shader: {fileID: 4800000, guid: f5a04ecee56bf5a41bff2cbbad573de4, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats: []
+    m_Colors:
+    - _particleColour: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []
+--- !u!21 &1178112016
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Instanced/Particle
+  m_Shader: {fileID: 4800000, guid: f5a04ecee56bf5a41bff2cbbad573de4, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats: []
+    m_Colors:
+    - _particleColour: {r: 1, g: 0.5231711, b: 0, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &1200160030
 MonoBehaviour:
@@ -447,62 +949,82 @@ MonoBehaviour:
   heightScale: 11
   particleScale: 2
   particleColour: {r: 1, g: 0, b: 0.8365736, a: 1}
---- !u!21 &1345690965
-Material:
-  serializedVersion: 8
+--- !u!84 &1411874481
+RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Instanced/Particle
-  m_Shader: {fileID: 4800000, guid: f5a04ecee56bf5a41bff2cbbad573de4, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 1
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs: []
-    m_Ints: []
-    m_Floats: []
-    m_Colors:
-    - _particleColour: {r: 0, g: 1, b: 0.645576, a: 1}
-  m_BuildTextureStacks: []
---- !u!21 &1456704452
-Material:
-  serializedVersion: 8
+  m_Name: SDF WindSpeed Map
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 2880
+  m_Height: 1448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 0
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1446832043
+RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Instanced/Particle
-  m_Shader: {fileID: 4800000, guid: f5a04ecee56bf5a41bff2cbbad573de4, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 1
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs: []
-    m_Ints: []
-    m_Floats: []
-    m_Colors:
-    - _particleColour: {r: 0.04460168, g: 1, b: 0, a: 1}
-  m_BuildTextureStacks: []
+  m_Name: SDF WindSpeed Map
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 2880
+  m_Height: 1448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 0
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!1 &1509628837
 GameObject:
   m_ObjectHideFlags: 0
@@ -610,34 +1132,82 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 101.52, y: 0, z: 0}
---- !u!21 &1541226823
-Material:
-  serializedVersion: 8
+--- !u!84 &1514826014
+RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Instanced/Particle
-  m_Shader: {fileID: 4800000, guid: f5a04ecee56bf5a41bff2cbbad573de4, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 1
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs: []
-    m_Ints: []
-    m_Floats: []
-    m_Colors:
-    - _particleColour: {r: 1, g: 0.5231711, b: 0, a: 1}
-  m_BuildTextureStacks: []
+  m_Name: SDF WindSpeed Map
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 2880
+  m_Height: 1448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 0
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
+--- !u!84 &1573920688
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SDF Temperature Map
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 2880
+  m_Height: 1448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 0
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!114 &1664156384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -668,6 +1238,89 @@ MonoBehaviour:
   heightScale: 2
   particleScale: 2
   particleColour: {r: 1, g: 0.5231711, b: 0, a: 1}
+--- !u!1 &1785309463
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1785309466}
+  - component: {fileID: 1785309465}
+  - component: {fileID: 1785309464}
+  m_Layer: 0
+  m_Name: DebugGlobe
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &1785309464
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1785309463}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 1894ec5d425786749b2e1064b14a5a8a, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1785309465
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1785309463}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1785309466
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1785309463}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2.03, y: 2.03, z: 2.03}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1785476581
 GameObject:
   m_ObjectHideFlags: 0
@@ -690,6 +1343,8 @@ GameObject:
   - component: {fileID: 1785476598}
   - component: {fileID: 1785476597}
   - component: {fileID: 1785476596}
+  - component: {fileID: 1785476608}
+  - component: {fileID: 1785476607}
   m_Layer: 0
   m_Name: fileReader
   m_TagString: Untagged
@@ -712,6 +1367,20 @@ MonoBehaviour:
   numParticles: 2000
   duration: 5
   timeScale: 10000
+  elevationDict:
+  - {fileID: 1785476606}
+  - {fileID: 1785476605}
+  - {fileID: 1785476604}
+  - {fileID: 1785476603}
+  - {fileID: 1785476602}
+  - {fileID: 1785476601}
+  - {fileID: 1785476600}
+  - {fileID: 1785476599}
+  - {fileID: 1785476598}
+  - {fileID: 1785476597}
+  - {fileID: 1785476596}
+  - {fileID: 1785476608}
+  - {fileID: 1785476607}
   mesh: {fileID: 289301614986012343, guid: 4beaee928feb0bf47900f7ec94d0e734, type: 3}
   instanceShader: {fileID: 4800000, guid: f5a04ecee56bf5a41bff2cbbad573de4, type: 3}
   compute: {fileID: 7200000, guid: ed23441cf08405440999fee513fd2960, type: 3}
@@ -727,12 +1396,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d133838afeb60149a8f059198c9545b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  windCompute: {fileID: 7200000, guid: f74dc6b14cfd1fa4988adb8304cecba1, type: 3}
-  texture: {fileID: 220270873}
+  windCompute: {fileID: 7200000, guid: abd43508adda0034a9fae0cb96d530d5, type: 3}
+  texture: {fileID: 1573920688}
   globe: {fileID: 1804170580}
+  debugGlobe: {fileID: 1785309464}
   filePath: Assets/Data/WindData/data(2).json
-  extremityGroundTemp: {x: 372.3824, y: 270.10202}
+  extremityGroundTemp: {x: 357.47708, y: 283.76343}
   elevationLookup:
+  - 0
   - 1
   - 2
   - 3
@@ -744,9 +1415,11 @@ MonoBehaviour:
   - 9
   - 10
   - 11
+  - 12
   numBoundaries: 444
-  elevationCount: 11
-  groundTexture: {fileID: 0}
+  boundaryCount: 13
+  elevationCount: 13
+  groundTexture: {fileID: 1573920688}
 --- !u!4 &1785476595
 Transform:
   m_ObjectHideFlags: 0
@@ -777,9 +1450,10 @@ MonoBehaviour:
   elevation: 11
   enableUpdates: 1
   config: {fileID: 1278890502}
-  particleMaterial: {fileID: 710418950}
+  particleMaterial: {fileID: 408239142}
   particleCount: 2000
   boundaryCount: 444
+  texture: {fileID: 382911895}
 --- !u!114 &1785476597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -795,9 +1469,10 @@ MonoBehaviour:
   elevation: 10
   enableUpdates: 1
   config: {fileID: 1881779662}
-  particleMaterial: {fileID: 1839149808}
+  particleMaterial: {fileID: 592171938}
   particleCount: 2000
   boundaryCount: 444
+  texture: {fileID: 532364639}
 --- !u!114 &1785476598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -813,9 +1488,10 @@ MonoBehaviour:
   elevation: 9
   enableUpdates: 1
   config: {fileID: 1917933737}
-  particleMaterial: {fileID: 465806443}
+  particleMaterial: {fileID: 305199213}
   particleCount: 2000
   boundaryCount: 444
+  texture: {fileID: 590693409}
 --- !u!114 &1785476599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -831,9 +1507,10 @@ MonoBehaviour:
   elevation: 8
   enableUpdates: 1
   config: {fileID: 480919546}
-  particleMaterial: {fileID: 797601895}
+  particleMaterial: {fileID: 688681300}
   particleCount: 2000
   boundaryCount: 444
+  texture: {fileID: 1411874481}
 --- !u!114 &1785476600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -849,9 +1526,10 @@ MonoBehaviour:
   elevation: 7
   enableUpdates: 1
   config: {fileID: 43971595}
-  particleMaterial: {fileID: 1151942530}
+  particleMaterial: {fileID: 897014775}
   particleCount: 2000
   boundaryCount: 444
+  texture: {fileID: 546384920}
 --- !u!114 &1785476601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -867,9 +1545,10 @@ MonoBehaviour:
   elevation: 6
   enableUpdates: 1
   config: {fileID: 1063550539}
-  particleMaterial: {fileID: 1345690965}
+  particleMaterial: {fileID: 277231058}
   particleCount: 2000
   boundaryCount: 444
+  texture: {fileID: 1514826014}
 --- !u!114 &1785476602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -885,9 +1564,10 @@ MonoBehaviour:
   elevation: 5
   enableUpdates: 1
   config: {fileID: 1200160030}
-  particleMaterial: {fileID: 1456704452}
+  particleMaterial: {fileID: 922314249}
   particleCount: 2000
   boundaryCount: 444
+  texture: {fileID: 962472502}
 --- !u!114 &1785476603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -903,9 +1583,10 @@ MonoBehaviour:
   elevation: 4
   enableUpdates: 1
   config: {fileID: 177229818}
-  particleMaterial: {fileID: 707182641}
+  particleMaterial: {fileID: 519795160}
   particleCount: 2000
   boundaryCount: 444
+  texture: {fileID: 1072888657}
 --- !u!114 &1785476604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -921,9 +1602,10 @@ MonoBehaviour:
   elevation: 3
   enableUpdates: 1
   config: {fileID: 2145115151}
-  particleMaterial: {fileID: 671002584}
+  particleMaterial: {fileID: 721951307}
   particleCount: 2000
   boundaryCount: 444
+  texture: {fileID: 1446832043}
 --- !u!114 &1785476605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -939,9 +1621,10 @@ MonoBehaviour:
   elevation: 2
   enableUpdates: 1
   config: {fileID: 1666278297}
-  particleMaterial: {fileID: 1541226823}
+  particleMaterial: {fileID: 1178112016}
   particleCount: 2000
   boundaryCount: 444
+  texture: {fileID: 59261960}
 --- !u!114 &1785476606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -957,9 +1640,48 @@ MonoBehaviour:
   elevation: 1
   enableUpdates: 1
   config: {fileID: 1664156384}
-  particleMaterial: {fileID: 295337043}
+  particleMaterial: {fileID: 481931307}
   particleCount: 2000
   boundaryCount: 444
+  texture: {fileID: 1997022915}
+--- !u!114 &1785476607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1785476581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e35d3f3062e44b4aa0da007bbab7809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  elevation: 12
+  enableUpdates: 1
+  config: {fileID: 322853755}
+  particleMaterial: {fileID: 1129953817}
+  particleCount: 2000
+  boundaryCount: 444
+  texture: {fileID: 1052212384}
+--- !u!114 &1785476608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1785476581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e35d3f3062e44b4aa0da007bbab7809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  elevation: 0
+  enableUpdates: 1
+  config: {fileID: 265662549}
+  particleMaterial: {fileID: 327543099}
+  particleCount: 2000
+  boundaryCount: 444
+  texture: {fileID: 171027224}
 --- !u!1 &1804170579
 GameObject:
   m_ObjectHideFlags: 0
@@ -1043,34 +1765,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!21 &1839149808
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Instanced/Particle
-  m_Shader: {fileID: 4800000, guid: f5a04ecee56bf5a41bff2cbbad573de4, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 1
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs: []
-    m_Ints: []
-    m_Floats: []
-    m_Colors:
-    - _particleColour: {r: 0.6476979, g: 0, b: 1, a: 1}
-  m_BuildTextureStacks: []
 --- !u!114 &1881779662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1101,6 +1795,44 @@ MonoBehaviour:
   heightScale: 9
   particleScale: 2
   particleColour: {r: 0.37375546, g: 0, b: 1, a: 1}
+--- !u!84 &1997022915
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SDF WindSpeed Map
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 2880
+  m_Height: 1448
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 52
+  m_MipMap: 0
+  m_GenerateMips: 0
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!114 &2145115151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1122,4 +1854,5 @@ SceneRoots:
   m_Roots:
   - {fileID: 1785476595}
   - {fileID: 1804170582}
+  - {fileID: 1785309466}
   - {fileID: 1509628841}

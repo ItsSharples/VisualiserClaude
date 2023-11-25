@@ -100,11 +100,11 @@ float3 getBoundaryVector(float3 p) {
 	float2 longLat = pointToLongitudeLatitude(normalize(p));
 	float2 uv = longitudeLatitudeToUV(longLat);
 	float2 f = WindDataTexture.SampleLevel(my_linear_repeat_sampler, uv, 0).rg;
-	f = (f.x, f.y);
+	//f = (f.x, f.y);
 
 	//float2 f = float2(boundary.uv);
 	//float2 longLat = pointToLongitudeLatitude(normalize(p));
-	float3 p2 = longitudeLatitudeToPoint(longLat + normalize(f) * 0.001);
+	float3 p2 = longitudeLatitudeToPoint(longLat + f);// normalize(f) * 0.001);
 	return normalize(p2 - p) * length(f);
 }
 

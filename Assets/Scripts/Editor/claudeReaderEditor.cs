@@ -3,12 +3,26 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 
 [CustomEditor(typeof(claudeReader))]
 class claudeReaderEditor : Editor
 {
-	int currentLayer = 0;
+	int _currentLayer = 0;
+	int currentLayer {
+		get => _currentLayer; set
+		{
+			_currentLayer = value;
+
+			var obj = (target as claudeReader);
+			var texture = obj.WindTextureForLayer(_currentLayer);
+			if (texture)
+			{
+				obj.debugGlobe.sharedMaterial.mainTexture = texture;
+			}
+		}
+	}
 	bool isFoldout = false;
 	GenericMenu layerMenu;
 
@@ -46,7 +60,8 @@ class claudeReaderEditor : Editor
 		isFoldout = EditorGUILayout.BeginFoldoutHeaderGroup(isFoldout, "Config");
 		if (isFoldout)
 		{
-			GUILayout.Box(obj.WindTextureForLayer(currentLayer), GUILayout.Width(width), GUILayout.Height(height));
+			var texture = obj.WindTextureForLayer(currentLayer);
+			GUILayout.Box(texture, GUILayout.Width(width), GUILayout.Height(height));
 		}
 		EditorGUILayout.EndFoldoutHeaderGroup();
 

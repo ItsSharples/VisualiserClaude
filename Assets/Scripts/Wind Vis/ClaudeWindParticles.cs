@@ -199,7 +199,7 @@ public class ClaudeWindParticles : MonoBehaviour
 	{
 		//elevation.ActivateMaterial();
 		ComputeHelper.AssignBuffer(compute, elevation.particleBuffer, "Particles", initKernel, updateKernel);
-		//ComputeHelper.AssignBuffer(compute, elevation.boundaryBuffer, "Boundaries", initKernel, updateKernel);
+		ComputeHelper.AssignBuffer(compute, elevation.boundaryBuffer, "Boundaries", initKernel, updateKernel);
 		ComputeHelper.AssignTexture(compute, elevation.texture, "WindDataTexture", initKernel, updateKernel);
 		ComputeHelper.Dispatch(compute, numParticles, kernelIndex: initKernel);
 	}
@@ -208,7 +208,7 @@ public class ClaudeWindParticles : MonoBehaviour
 		elevation.ActivateMaterial();
 		
 		ComputeHelper.AssignBuffer(compute, elevation.particleBuffer, "Particles", initKernel, updateKernel);
-		//ComputeHelper.AssignBuffer(compute, elevation.boundaryBuffer, "Boundaries", initKernel, updateKernel);
+		ComputeHelper.AssignBuffer(compute, elevation.boundaryBuffer, "Boundaries", initKernel, updateKernel);
 		ComputeHelper.AssignTexture(compute, elevation.texture, "WindDataTexture", initKernel, updateKernel);
 
 		compute.SetInt("numParticles", numParticles);
