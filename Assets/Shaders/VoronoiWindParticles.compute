@@ -10,10 +10,13 @@ struct Particle {
 };
 
 struct Boundary {
-	int index;
-	int elevationIndex;
-	float2 longlat;
-	float2 uv;
+	uint index;
+	uint elevationIndex;
+	float longitude;
+	float latitude;
+
+	float u;
+	float v;
 };
 
 //Texture2D<float2> WindMap
@@ -34,20 +37,31 @@ static const float halfPI = PI / 2.0f;
 Boundary getClosestBoundary(float3 p) {
 	float2 longLat = pointToLongitudeLatitude(normalize(p));
 	float2 uv = longitudeLatitudeToUV(longLat);
+	float3 pixelPoint = longitudeLatitudeToPoint(longLat);
 
 	float closestDistance = 99999;
 	uint closestIndex = -1;
 
 	for (uint index = 0; index < numBoundaries; index++) {
 		Boundary boundaryVector = Boundaries[index];
-		float latitude = boundaryVector.longlat.y;
-		float longitude = boundaryVector.longlat.x;
+		float latitude = boundaryVector.latitude;
+		float longitude = boundaryVector.longitude;
 		float index = boundaryVector.index;
-		float2 boundaryLongLat = float2(longitude * 0.75f, latitude - halfPI);
+		float2 boundaryLongLat = float2(longitude, latitude + halfPI);
+		float3 boundaryPoint = longitudeLatitudeToPoint(boundaryLongLat);
 		float2 pointUV = longitudeLatitudeToUV(boundaryLongLat);
 		float2 deltaLonLat = longLat.xy - boundaryLongLat.xy;
 
 		float dist = closestDistance;// = distance(longLat.xy, boundaryLongLat.xy);
+
+
+		dist = distanceBetweenPointsOnUnitSphere(pixelPoint, boundaryPoint);
+		if (dist < closestDistance) {
+			closestDistance = dist;
+			closestIndex = index;
+		}
+
+		continue;
 		float tmpDist;
 		float2 modifyPointUV;
 		modifyPointUV = float2(0, 0);
@@ -96,7 +110,8 @@ Boundary getClosestBoundary(float3 p) {
 
 float3 getBoundaryVector(float3 p) {
 	Boundary boundary = getClosestBoundary(p);
-	float2 f = -1.0f * float2(boundary.uv);
+	float2 modifier = float2(-1.0f, 1.0f);
+	float2 f = modifier * float2(boundary.u, boundary.v);
 	float2 longLat = pointToLongitudeLatitude(normalize(p));
 	float3 p2 = longitudeLatitudeToPoint(longLat + normalize(f) * 0.001);
 	return normalize(p2 - p) * length(f);

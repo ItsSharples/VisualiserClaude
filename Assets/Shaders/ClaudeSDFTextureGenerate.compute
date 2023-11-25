@@ -87,7 +87,14 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 		static const float longDelta = 2 * PI;
 		static const float latDelta = PI;
 
+		dist = distanceBetweenPointsOnUnitSphere(pixelPoint, pointPoint);
 
+		if (dist < minDistance) {
+			minDistance = dist;
+			currIndex = index;
+			atPointIndex = gndTmp;
+		}
+		continue;
 		/*
 		float xDist = (pixelLongLat.x - pointLongLat.x);
 		if (pixelLongLat.x < -halfPI) {
