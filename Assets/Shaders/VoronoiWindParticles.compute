@@ -39,7 +39,7 @@ Boundary getClosestBoundary(float3 p) {
 	float2 uv = longitudeLatitudeToUV(longLat);
 	float3 pixelPoint = longitudeLatitudeToPoint(longLat);
 
-	float closestDistance = 99999;
+	float closestDistance = 9999999;
 	uint closestIndex = -1;
 
 	for (uint index = 0; index < numBoundaries; index++) {
@@ -47,58 +47,12 @@ Boundary getClosestBoundary(float3 p) {
 		float latitude = boundaryVector.latitude;
 		float longitude = boundaryVector.longitude;
 		float index = boundaryVector.index;
-		float2 boundaryLongLat = float2(longitude, latitude + halfPI);
+		float2 boundaryLongLat = float2(longitude, latitude + 1 * halfPI);
 		float3 boundaryPoint = longitudeLatitudeToPoint(boundaryLongLat);
-		float2 pointUV = longitudeLatitudeToUV(boundaryLongLat);
-		float2 deltaLonLat = longLat.xy - boundaryLongLat.xy;
+		//float2 pointUV = longitudeLatitudeToUV(boundaryLongLat);
+		//float2 deltaLonLat = longLat.xy - boundaryLongLat.xy;
 
-		float dist = closestDistance;// = distance(longLat.xy, boundaryLongLat.xy);
-
-
-		dist = distanceBetweenPointsOnUnitSphere(pixelPoint, boundaryPoint);
-		if (dist < closestDistance) {
-			closestDistance = dist;
-			closestIndex = index;
-		}
-
-		continue;
-		float tmpDist;
-		float2 modifyPointUV;
-		modifyPointUV = float2(0, 0);
-		tmpDist = length(uv - pointUV + modifyPointUV);
-		dist = min(dist, tmpDist);
-
-		modifyPointUV = float2(0, 1);
-		tmpDist = length(uv - pointUV + modifyPointUV);
-		dist = min(dist, tmpDist);
-
-		modifyPointUV = float2(0, -1);
-		tmpDist = length(uv - pointUV + modifyPointUV);
-		dist = min(dist, tmpDist);
-
-		modifyPointUV = float2(1, 0);
-		tmpDist = length(uv - pointUV + modifyPointUV);
-		dist = min(dist, tmpDist);
-
-		modifyPointUV = float2(1, 1);
-		tmpDist = length(uv - pointUV + modifyPointUV);
-		dist = min(dist, tmpDist);
-
-		modifyPointUV = float2(1, -1);
-		tmpDist = length(uv - pointUV + modifyPointUV);
-		dist = min(dist, tmpDist);
-
-		modifyPointUV = float2(-1, 0);
-		tmpDist = length(uv - pointUV + modifyPointUV);
-		dist = min(dist, tmpDist);
-
-		modifyPointUV = float2(-1, 1);
-		tmpDist = length(uv - pointUV + modifyPointUV);
-		dist = min(dist, tmpDist);
-
-		modifyPointUV = float2(-1, -1);
-		tmpDist = length(uv - pointUV + modifyPointUV);
-		dist = min(dist, tmpDist);
+		float dist = distanceBetweenPointsOnUnitSphere(normalize(pixelPoint), normalize(boundaryPoint));
 
 		if (dist < closestDistance) {
 			closestDistance = dist;
@@ -109,12 +63,16 @@ Boundary getClosestBoundary(float3 p) {
 }
 
 float3 getBoundaryVector(float3 p) {
+	const float deltaLongLat = 0.0001f;
 	Boundary boundary = getClosestBoundary(p);
 	float2 modifier = float2(-1.0f, 1.0f);
-	float2 f = modifier * float2(boundary.u, boundary.v);
+	// Wind Speed
+	float2 windSpeed = modifier * float2(boundary.u, boundary.v);
+	// Current Position
 	float2 longLat = pointToLongitudeLatitude(normalize(p));
-	float3 p2 = longitudeLatitudeToPoint(longLat + normalize(f) * 0.001);
-	return normalize(p2 - p) * length(f);
+	// Future Position
+	float3 p2 = longitudeLatitudeToPoint(longLat + normalize(windSpeed) * deltaLongLat);
+	return normalize(p2 - p) * length(windSpeed);
 }
 
 /*

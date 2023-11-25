@@ -11,7 +11,7 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 public class ClaudeWindParticles : MonoBehaviour
 {
 
@@ -79,7 +79,7 @@ public class ClaudeWindParticles : MonoBehaviour
 			InitElevation(elevation);
 		}
 
-
+		rebuildBuffers();
 	}
 
 	public void rebuildBuffers(bool ForceRebuild = false)
@@ -185,6 +185,11 @@ public class ClaudeWindParticles : MonoBehaviour
 		//{
 		//	rebuildBuffers();
 		//}
+
+		if(argsBuffer == null)
+		{
+			argsBuffer = ComputeHelper.CreateArgsBuffer(mesh, numParticles);
+		}
 
 
 		if (Application.isPlaying)

@@ -31,7 +31,7 @@ const uint boundary_count;
 const uint width = 360;
 const uint height = 181;
 
-static const int defaultDistance = 1000000;
+static const float defaultDistance = 100000.0f;
 static const float halfPI = PI / 2.0f;
 
 static const float sphereRadius = 16.0f;
@@ -55,9 +55,9 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 	//float pixel_lat_rad = radians(adjusted_latitude);
 	float2 uv = xy / float2(width, height);
 
-	float3 pixelLongLat = float3(uvToLongitudeLatitude(uv), sphereRadius);// float2(radians(id.x - width / 2), radians(id.y));
+	float3 pixelLongLat = float3(uvToLongitudeLatitude(uv), sphereRadius);
 	//float3 pixelLongLatTmp = pixelLongLat;
-	float3 pixelPoint = longitudeLatitudeToPoint(pixelLongLat);
+	float3 pixelPoint = uvToPointOnSphere(uv);
 
 	float minDistance = defaultDistance;
 	float currIndex = -1;
@@ -72,178 +72,20 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 		Pixel pointVector = Pixels[point_index];
 		float latitude = pointVector.latitude;
 		float longitude = pointVector.longitude;
-		float index = pointVector.index;
-		float gndTmp = pointVector.groundTemp;
 
-		float3 pointLongLat = float3(longitude, latitude - halfPI, sphereRadius);
-		float3 pointLongLatTmp = pointLongLat;
-		float3 pointPoint = longitudeLatitudeToPoint(pointLongLat);
-		float2 pointUV = longitudeLatitudeToUV(pointLongLat);
-		float dist = defaultDistance;
-		float tmpDist;
+		
+		//float3 pointLongLat = float3(longitude, latitude , sphereRadius);
+		float3 pointPoint = longitudeLatitudeToPoint(float2(longitude, latitude - halfPI));
 
-		static const float LongWidth = 2 * PI;
-		static const float LatHeight = 1 * PI;
-		static const float longDelta = 2 * PI;
-		static const float latDelta = PI;
-
-		dist = distanceBetweenPointsOnUnitSphere(pixelPoint, pointPoint);
+		float dist = distanceBetweenPointsOnUnitSphere(pixelPoint, pointPoint);
 
 		if (dist < minDistance) {
 			minDistance = dist;
-			currIndex = index;
-			atPointIndex = gndTmp;
+			currIndex = point_index;
+			//atPointIndex = gndTmp;
 		}
 		continue;
-		/*
-		float xDist = (pixelLongLat.x - pointLongLat.x);
-		if (pixelLongLat.x < -halfPI) {
-			if (uv.y > 0.5) {
-				OutTexture[xy] = float4(longitude, latitude, uv);
-				return;
-			}
-		}
-		*/
-		//float xDist = length(pixelLongLat.x - pointLongLat.x);
-		//if (xDist < currDist.x) {
-		//	float yDist = length(pixelLongLat.y - pointLongLat.y);
-		//	if (yDist < currDist.y) {
-		//		currDist = float3(xDist, yDist, index);
-		//		//continue;// return;
-		//	}
-		//}
-		//pixelPoint = longitudeLatitudeToPoint(pixelLongLat);
-
-		//tmpDist = geodesicDistance(pixelLongLat.xyz, pointLongLat.xyz);
-		//tmpDist = length(pixelLongLat.xy - pointLongLat.xy);
-		//tmpDist = abs(pixelLongLat.xy - pointLongLat.xy);
-		//tmpDist = distance(pixelPoint, pointPoint);
-		float2 modifyPointUV;
-
-		modifyPointUV = float2(0, 0);
-		tmpDist = length(uv - pointUV + modifyPointUV);
-		dist = min(dist, tmpDist);
-
-		modifyPointUV = float2(0, 1);
-		tmpDist = length(uv - pointUV + modifyPointUV);
-		dist = min(dist, tmpDist);
-
-		modifyPointUV = float2(0, -1);
-		tmpDist = length(uv - pointUV + modifyPointUV);
-		dist = min(dist, tmpDist);
-
-		modifyPointUV = float2(1, 0);
-		tmpDist = length(uv - pointUV + modifyPointUV);
-		dist = min(dist, tmpDist);
-
-		modifyPointUV = float2(1, 1);
-		tmpDist = length(uv - pointUV + modifyPointUV);
-		dist = min(dist, tmpDist);
-
-		modifyPointUV = float2(1, -1);
-		tmpDist = length(uv - pointUV + modifyPointUV);
-		dist = min(dist, tmpDist);
-
-		modifyPointUV = float2(-1, 0);
-		tmpDist = length(uv - pointUV + modifyPointUV);
-		dist = min(dist, tmpDist);
-
-		modifyPointUV = float2(-1, 1);
-		tmpDist = length(uv - pointUV + modifyPointUV);
-		dist = min(dist, tmpDist);
-
-		modifyPointUV = float2(-1, -1);
-		tmpDist = length(uv - pointUV + modifyPointUV);
-		dist = min(dist, tmpDist);
-
-		
-
-		//pointLongLatTmp = (((pointLongLat.x) % LongWidth, (pointLongLat.y + latDelta) % LatHeight));
-		//tmpDist = distance(pixelLongLat.xy, pointLongLatTmp.xy);
-		//dist = min(dist, tmpDist);
-
-		//pointLongLatTmp = (((pointLongLat.x) % LongWidth, (pointLongLat.y - latDelta) % LatHeight));
-		//tmpDist = distance(pixelLongLat.xy, pointLongLatTmp.xy);
-		//dist = min(dist, tmpDist);
-
-		//pointLongLatTmp = (((pointLongLat.x + latDelta) % LongWidth, (pointLongLat.y + latDelta) % LatHeight));
-		//tmpDist = distance(pixelLongLat.xy, pointLongLatTmp.xy);
-		//dist = min(dist, tmpDist);
-
-		//pointLongLatTmp = (((pointLongLat.x + longDelta) % LongWidth, (pointLongLat.y - latDelta) % LatHeight));
-		//tmpDist = distance(pixelLongLat.xy, pointLongLatTmp.xy);
-		//dist = min(dist, tmpDist);
-
-		//pointLongLatTmp = (((pointLongLat.x - longDelta) % LongWidth, (pointLongLat.y + latDelta) % LatHeight));
-		//tmpDist = distance(pixelLongLat.xy, pointLongLatTmp.xy);
-		//dist = min(dist, tmpDist);
-		//
-		//pointLongLatTmp = (((pointLongLat.x - longDelta) % LongWidth, (pointLongLat.y - latDelta) % LatHeight));
-		//tmpDist = distance(pixelLongLat.xy, pointLongLatTmp.xy);
-		//dist = min(dist, tmpDist);
-
-		//pointLongLatTmp = (((pointLongLat.x + longDelta) % LongWidth, (pointLongLat.y) % LatHeight));
-		//tmpDist = distance(pixelLongLat.xy, pointLongLatTmp.xy);
-		//dist = min(dist, tmpDist);
-
-		//pointLongLatTmp = (((pointLongLat.x - longDelta) % LongWidth, (pointLongLat.y) % LatHeight));
-		//tmpDist = distance(pixelLongLat.xy, pointLongLatTmp.xy);
-		//dist = min(dist, tmpDist);
-
-
-
-		//dist = geodesicDistance(pixelPoint, pointPoint);
-		
-		if (dist < minDistance) {
-			minDistance = dist;
-			currIndex = index;
-			atPointIndex = gndTmp;
-		}
-
-		if (dist < pointDistance) {
-			//atPointIndex = 1.0f;
-		}
 	}
 	Pixel closestPixel = Pixels[currIndex];
-	float2 distanceFromPoint = ((closestPixel.longitude - pixelLongLat.x), (closestPixel.latitude - pixelLongLat.y));
-	OutTexture[xy] = float4(closestPixel.index, closestPixel.groundTemp, closestPixel.longitude, closestPixel.latitude);// float4(closestPixel.w, atPointIndex, closestPixel.z, atPointIndex);
-	return;
-
-	[loop]
-	for (point_index = 0; point_index < boundary_count; point_index++) {
-		Boundary boundaryVector = Boundaries[point_index];
-		float latitude = boundaryVector.latitude;
-		float longitude = boundaryVector.longitude;
-		float index = boundaryVector.index;
-		float3 boundaryLongLat = float3(longitude, latitude - halfPI, sphereRadius);
-
-		float dist = distance(pixelLongLat.xy, boundaryLongLat.xy);
-
-
-		//if (dist < minDistance) {
-		//	minDistance = dist;
-		//	currIndex = index;
-		//}
-
-		if (dist < pointDistance) {
-			atPoint = 1.0f;
-		}
-	}
-	Boundary closestBoundary = Boundaries[currIndex];
-	
-	float2 windSpeed = float2(closestBoundary.u, closestBoundary.v);
-	float groundTmp = closestPixel.groundTemp;
-
-
-	// Modify wind vector to behave better around poles.
-	// TODO: figure out better solution!
-	//float2 uv = float2(x, y) / float2(width - 1, height - 1);
-	float2 longLat = uvToLongitudeLatitude(uv);
-	float mag = length(windSpeed);
-	windSpeed.x /= max(0.001, cos(longLat.y));
-	windSpeed = normalize(windSpeed) * mag;
-
-	OutTexture[id.xy] = float4(groundTmp, atPoint, closestPixel.index, atPointIndex);
-		//float4(saturate(minDistance), currIndex / pixel_count, atPoint, atPointIndex);
-
+	OutTexture[xy] = float4(closestPixel.index, closestPixel.groundTemp, closestPixel.longitude, closestPixel.latitude);
 }
