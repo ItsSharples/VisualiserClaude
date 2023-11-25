@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using Unity.VisualScripting.FullSerializer;
 using UnityEditor;
 using UnityEditor.TerrainTools;
 using UnityEngine;
@@ -21,7 +22,7 @@ public class ClaudeWindParticles : MonoBehaviour
 
 	//int numLayers => FindObjectOfType<LayeredWindReader>().TextureCount;
 	//bool move;
-	//public float size = 0.1f;
+	public float globalScale = 1.0f;
 	public float duration;
 	//float stretch = 0;
 	public float timeScale = 1;
@@ -193,6 +194,9 @@ public class ClaudeWindParticles : MonoBehaviour
 				if(elevationObject.enableUpdates)
 				{
 					UpdateElevation(elevationObject);// Update(elevation: elevation);
+
+					elevationObject.particleMaterial.SetFloat("size", elevationObject.config.particleScale * globalScale);
+					
 					Graphics.DrawMeshInstancedIndirect(mesh, 0, elevationObject.particleMaterial, bounds, argsBuffer);
 				}
 			}
