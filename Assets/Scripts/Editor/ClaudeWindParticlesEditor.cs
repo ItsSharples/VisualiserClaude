@@ -18,7 +18,7 @@ class ClaudeWindParticlesEditor : Editor
 
 		if (GUILayout.Button("Update Data"))
 		{
-			obj.rebuildBuffers(true);
+			obj.FreshStart();
 		}
 
 		if (obj.elevationDict != null)
@@ -32,8 +32,8 @@ class ClaudeWindParticlesEditor : Editor
 				{
 					using (new EditorGUILayout.HorizontalScope(GUILayout.ExpandWidth(false)))
 					{
-						var allEnabled = obj.elevationDict.All(pair => pair.Value.enableUpdates);
-						var anyEnabled = obj.elevationDict.Any(pair => pair.Value.enableUpdates);
+						var allEnabled = obj.elevationDict.All(pair => pair.enableUpdates);
+						var anyEnabled = obj.elevationDict.Any(pair => pair.enableUpdates);
 
 						var showMixedValue = EditorGUI.showMixedValue;
 						EditorGUI.showMixedValue = anyEnabled && !allEnabled;
@@ -52,7 +52,7 @@ class ClaudeWindParticlesEditor : Editor
 					}
 
 
-					foreach (var (elevation, elevationObject) in obj.elevationDict)
+					foreach (var elevationObject in obj.elevationDict)
 					{
 						using (new EditorGUILayout.HorizontalScope(GUILayout.ExpandWidth(false)))
 						{
@@ -60,7 +60,7 @@ class ClaudeWindParticlesEditor : Editor
 							boxStyle.normal.background.SetPixel(0,0, boxColour);
 							boxStyle.normal.background.Apply();
 							GUILayout.Box("", boxStyle, GUILayout.Width(EditorGUIUtility.singleLineHeight), GUILayout.ExpandWidth(false));
-							elevationObject.enableUpdates = EditorGUILayout.Toggle($"Enabled ({elevation}):", elevationObject.enableUpdates, GUILayout.ExpandWidth(false));
+							elevationObject.enableUpdates = EditorGUILayout.Toggle($"Enabled ({elevationObject.elevation}):", elevationObject.enableUpdates, GUILayout.ExpandWidth(false));
 							EditorGUILayout.Space();
 						}
 

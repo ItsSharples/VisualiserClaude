@@ -1,0 +1,122 @@
+#pragma kernel GenerateTextureTemperature
+#pragma kernel GenerateTextureWindspeed
+
+#include "Assets/Scripts/Compute Common/GeoMath.hlsl"
+
+struct Boundary {
+	uint index;
+	uint elevationIndex;
+	float longitude;
+	float latitude;
+
+	float u;
+	float v;
+};
+
+struct Pixel {
+	float latitude;
+	float longitude;
+	float index;
+
+	float groundTemp;
+};
+
+StructuredBuffer<Pixel> Pixels;
+StructuredBuffer<Boundary> Boundaries;
+
+RWTexture2D<float4> OutTexture;
+
+const uint pixel_count;
+const uint boundary_count;
+
+const uint width = 360;
+const uint height = 181;
+
+static const int defaultDistance = 1000000;
+static const float halfPI = PI / 2.0f;
+
+static const float sphereRadius = 16.0f;
+static const float pointDistance = 0.031250f;
+
+float geodesicDistance(float3 a, float3 b) {
+	return atan(length(cross(a, b)) / dot(a, b));
+}
+
+
+[numthreads(8,8,1)]
+void GenerateTextureTemperature(uint3 id : SV_DispatchThreadID)
+{
+	if ((uint)id.x >= width || (uint)id.y >= height) { return; }
+
+	int x = (id.x + width / 2) % width;
+	int y = height - 1 - id.y;
+	int i = y * width + x;
+
+	float2 xy = float2(id.x, id.y);
+	float2 uv = xy / float2(width, height);
+
+	float2 pixelLongLat = uvToLongitudeLatitude(uv);
+	float3 pixelPoint = normalize(longitudeLatitudeToPoint(pixelLongLat));
+
+	float minDistance = defaultDistance;
+	float currIndex = -1;
+	
+	uint point_index;
+	[loop]
+	for (point_index = 0; point_index < pixel_count; point_index++) {
+		Pixel pointVector = Pixels[point_index];
+		float latitude = pointVector.latitude;
+		float longitude = pointVector.longitude;
+		float index = pointVector.index;
+
+		float2 pointLongLat = float2(longitude, latitude - halfPI);
+		float3 pointPoint = normalize(longitudeLatitudeToPoint(pointLongLat));
+
+		float dist = distanceBetweenPointsOnUnitSphere(pointPoint, pixelPoint);
+		if (dist < minDistance) {
+			minDistance = dist;
+			currIndex = index;
+		}
+	}
+	Pixel closestPixel = Pixels[currIndex];
+	OutTexture[xy] = float4(closestPixel.index, closestPixel.groundTemp, closestPixel.longitude, closestPixel.latitude);
+}
+
+[numthreads(8, 8, 1)]
+void GenerateTextureWindspeed(uint3 id : SV_DispatchThreadID)
+{
+	if ((uint)id.x >= width || (uint)id.y >= height) { return; }
+
+	int x = (id.x + width / 2) % width;
+	int y = height - 1 - id.y;
+	int i = y * width + x;
+
+	float2 xy = float2(id.x, id.y);
+	float2 uv = xy / float2(width, height);
+
+	float2 pixelLongLat = uvToLongitudeLatitude(uv);
+	float3 pixelPoint = normalize(longitudeLatitudeToPoint(pixelLongLat));
+
+	float minDistance = defaultDistance;
+	float currIndex = -1;
+
+	uint index;
+	[loop]
+	for (index = 0; index < boundary_count; index++) {
+		Boundary boundaryVector = Boundaries[index];
+		float latitude = boundaryVector.latitude;
+		float longitude = boundaryVector.longitude;
+		uint index = boundaryVector.index;
+
+		float2 boundaryLongLat = float2(longitude, latitude - halfPI);
+		float3 boundaryPoint = normalize(longitudeLatitudeToPoint(boundaryLongLat));
+
+		float dist = distanceBetweenPointsOnUnitSphere(boundaryPoint, pixelPoint);
+		if (dist < minDistance) {
+			minDistance = dist;
+			currIndex = index;
+		}
+	}
+	Boundary closestBoundary = Boundaries[currIndex];
+	OutTexture[xy] = float4(closestBoundary.u, closestBoundary.v, length(float2(closestBoundary.u, closestBoundary.v)), closestBoundary.index);
+}

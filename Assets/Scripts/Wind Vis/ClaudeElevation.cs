@@ -15,18 +15,17 @@ public class ClaudeElevation : MonoBehaviour
 	public uint particleCount;
 	public ComputeBuffer boundaryBuffer;
 	public uint boundaryCount;
+	public RenderTexture texture;
 
-	//public RenderTexture texture;
-
-	public void Create(float elevation, ref Shader instanceShader, uint particleCount, ComputeBuffer buffer)
+	public void Create(float elevation, ref Shader instanceShader, uint particleCount)
 	{
 		config = ScriptableObject.CreateInstance<ElevationConfig>();
 		this.elevation = elevation;
 
-		Rebuild(ref instanceShader, particleCount, buffer);
+		Rebuild(ref instanceShader, particleCount);
 	}
 
-	public void Rebuild(ref Shader instanceShader, uint particleCount, ComputeBuffer buffer)
+	public void Rebuild(ref Shader instanceShader, uint particleCount)
 	{
 		if(config == null)
 		{
@@ -43,10 +42,17 @@ public class ClaudeElevation : MonoBehaviour
 			particleBuffer.Release();
 		}
 		particleBuffer = ComputeHelper.CreateStructuredBuffer<Particle>((int)particleCount);
-		boundaryBuffer = buffer;
 
 		this.particleCount = particleCount;
-		this.boundaryCount = (uint)boundaryBuffer.count;
+		
+	}
+
+	public void SetData(ComputeBuffer buffer, RenderTexture texture)
+	{
+		boundaryBuffer = buffer;
+		boundaryCount = (uint)buffer.count;
+
+		this.texture = texture;
 	}
 
 	//public void UpdateBuffer(ref ComputeShader compute)
@@ -60,7 +66,8 @@ public class ClaudeElevation : MonoBehaviour
 	public void ActivateMaterial()
 	{
 		particleMaterial.SetBuffer("Particles", particleBuffer);
-		particleMaterial.SetBuffer("Boundaries", boundaryBuffer);
+		//particleMaterial.SetBuffer("Boundaries", boundaryBuffer);
+		//particleMaterial.SetTexture("", texture);
 		particleMaterial.SetFloat("size", config.particleScale);
 		particleMaterial.SetFloat("stretch", config.stretch);
 

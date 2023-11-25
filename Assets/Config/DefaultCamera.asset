@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2cb3118b99047447a1474902af972ec, type: 3}
   m_Name: DefaultCamera
   m_EditorClassIdentifier: 
-  latitude: 0
-  longitude: 2.51
+  latitude: 0.054
+  longitude: 6.8
   altitude: 2.5

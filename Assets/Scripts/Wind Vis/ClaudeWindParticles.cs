@@ -28,7 +28,7 @@ public class ClaudeWindParticles : MonoBehaviour
 
 	//public float[] heights;
 
-	public Dictionary<float, ClaudeElevation> elevationDict;
+	public List<ClaudeElevation> elevationDict;
 	//Dictionary<float, ComputeBuffer> dictionaryParticleBuffers;
 
 	[Header("References")]
@@ -48,14 +48,15 @@ public class ClaudeWindParticles : MonoBehaviour
 	int numBuffers;
 	int numLayers;
 
-	void Start()
+	void Start() { FreshStart(); }
+	public void FreshStart()
 	{
-		elevationDict = new Dictionary<float, ClaudeElevation>();
+		elevationDict = new List<ClaudeElevation>();
 		//dictionaryParticleBuffers = new Dictionary<float, ComputeBuffer>();
 
 		foreach (var elevation in GetComponentsInParent<ClaudeElevation>())
 		{
-			elevationDict.Add(elevation.elevation, elevation);
+			elevationDict.Add(elevation);
 		}
 
 		rebuildBuffers();
@@ -65,15 +66,7 @@ public class ClaudeWindParticles : MonoBehaviour
 		// Create args buffer
 		argsBuffer = ComputeHelper.CreateArgsBuffer(mesh, numParticles);
 
-		//particleBuffer = ComputeHelper.CreateStructuredBuffer<Particle>(numParticles);
-
-		//for (int i = 0; i < FindObjectOfType<LayeredWindReader>().TextureCount; i++)
-		//{
-		//	AssignLayer(i);
-		//	ComputeHelper.Dispatch(compute, numParticles, kernelIndex: initKernel);
-		//}
-
-		foreach(var (height, elevation) in elevationDict)
+		foreach(var elevation in elevationDict)
 		{
 			InitElevation(elevation);
 		}
@@ -83,26 +76,10 @@ public class ClaudeWindParticles : MonoBehaviour
 
 	public void rebuildBuffers(bool ForceRebuild = false)
 	{
-
-		//if (layeredParticleBuffers != null)
-		//{
-		//	ComputeHelper.Release(layeredParticleBuffers);
-		//}
 		var reader = FindObjectOfType<claudeReader>();
 		if (reader == null) { return; }
 		if (!reader.isLoaded) { reader.LoadFile(); }
 
-
-		//numLayers = reader.TextureCount;
-		//layeredParticleBuffers = new ComputeBuffer[numLayers];
-		//materials = new Material[numLayers];
-		//heights = new float[numLayers];
-
-		//for (int i = 0; i < numLayers; i++)
-		//{
-		//	//var reader = FindObjectOfType<LayeredWindReader>();
-		//	var elevation = reader.elevationLookup[i];
-		//	//heights[i] = elevation;
 		if (ForceRebuild)
 		{
 
@@ -111,43 +88,56 @@ public class ClaudeWindParticles : MonoBehaviour
 				DestroyImmediate(elevation);
 			}
 
-			elevationDict = new Dictionary<float, ClaudeElevation>();
+			elevationDict = new List<ClaudeElevation>();
 			ClaudeElevation elevationObject;
-			foreach (var elevation in reader.elevationLookup)
+			foreach (var elevation in reader.GetElevations())
 			{
 				elevationObject = gameObject.AddComponent<ClaudeElevation>();
-				elevationObject.Create(elevation, ref instanceShader, (uint)numParticles, reader.GetBoundariesForElevation(elevation));
+				elevationObject.Create(elevation, ref instanceShader, (uint)numParticles);
 				elevationObject.config.heightScale = elevation;
-				elevationDict.Add(elevation, elevationObject);
+				elevationDict.Add(elevationObject);
+
+				elevationObject.SetData(reader.GetBoundariesForElevation(elevation), reader.WindTextureForElevation(elevation));
 			}
 		}
 		else
 		{
-			foreach (var elevation in reader.elevationLookup)
+			foreach (var elevation in reader.GetElevations())
 			{
 				//var buffer = ;
 				//Debug.Log(elevationDict.Keys.Count);
 				ClaudeElevation elevationObject;
 
-				if (elevationDict.TryGetValue(elevation, out elevationObject))
+				elevationObject = elevationDict.Find(x => x.elevation == elevation);
+				if (elevationObject != null)
 				{
-					elevationObject.Rebuild(ref instanceShader, (uint)numParticles, reader.GetBoundariesForElevation(elevation));
-					//elevationObject.boundaryBuffer = ;
-					//elevationObject.texture = reader.WindTextureForElevation(elevation);
+					elevationObject.Rebuild(ref instanceShader, (uint)numParticles);
+					
 				}
 				else
 				{
 					elevationObject = gameObject.AddComponent<ClaudeElevation>();
-					elevationObject.Create(elevation, ref instanceShader, (uint)numParticles, reader.GetBoundariesForElevation(elevation));
+					elevationObject.Create(elevation, ref instanceShader, (uint)numParticles);
 					elevationObject.config.heightScale = elevation;
-					//elevationObject.boundaryBuffer = reader.GetBoundariesForElevation(elevation);
-					//elevationObject.texture = reader.WindTextureForElevation(elevation);
-					elevationDict.Add(elevation, elevationObject);
+					elevationDict.Add(elevationObject);
 				}
+
+				//if (reader.IsValidElevation(elevation))
+				{
+					var boundaries = reader.GetBoundariesForElevation(elevation);
+					var texture = reader.WindTextureForElevation(elevation);
+					Debug.Log($"{boundaries},{texture}");
+					elevationObject.SetData(boundaries, texture);
+				}
+				//else
+				//{
+				//	Debug.Log($"AAAAAA: {elevation}");
+				//	continue;
+				//}
 			}
 		}
 
-		foreach (var (height, elevation) in elevationDict)
+		foreach (var elevation in elevationDict)
 		{
 			InitElevation(elevation);
 		}
@@ -184,11 +174,14 @@ public class ClaudeWindParticles : MonoBehaviour
 		//{
 		//	rebuildBuffers();
 		//}
-
+		if(argsBuffer == null)
+		{
+			argsBuffer = ComputeHelper.CreateArgsBuffer(mesh, numParticles);
+		}
 
 		if (Application.isPlaying)
 		{
-			foreach (var (elevation, elevationObject) in elevationDict)
+			foreach (var elevationObject in elevationDict)
 			{
 				if(elevationObject.enableUpdates)
 				{
@@ -206,8 +199,8 @@ public class ClaudeWindParticles : MonoBehaviour
 	{
 		//elevation.ActivateMaterial();
 		ComputeHelper.AssignBuffer(compute, elevation.particleBuffer, "Particles", initKernel, updateKernel);
-		ComputeHelper.AssignBuffer(compute, elevation.boundaryBuffer, "Boundaries", initKernel, updateKernel);
-		//ComputeHelper.AssignTexture(compute, elevation.texture, "WindMap", initKernel, updateKernel);
+		//ComputeHelper.AssignBuffer(compute, elevation.boundaryBuffer, "Boundaries", initKernel, updateKernel);
+		ComputeHelper.AssignTexture(compute, elevation.texture, "WindDataTexture", initKernel, updateKernel);
 		ComputeHelper.Dispatch(compute, numParticles, kernelIndex: initKernel);
 	}
 	void UpdateElevation(ClaudeElevation elevation)
@@ -215,7 +208,8 @@ public class ClaudeWindParticles : MonoBehaviour
 		elevation.ActivateMaterial();
 		
 		ComputeHelper.AssignBuffer(compute, elevation.particleBuffer, "Particles", initKernel, updateKernel);
-		ComputeHelper.AssignBuffer(compute, elevation.boundaryBuffer, "Boundaries", initKernel, updateKernel);
+		//ComputeHelper.AssignBuffer(compute, elevation.boundaryBuffer, "Boundaries", initKernel, updateKernel);
+		ComputeHelper.AssignTexture(compute, elevation.texture, "WindDataTexture", initKernel, updateKernel);
 
 		compute.SetInt("numParticles", numParticles);
 		compute.SetInt("numBoundaries", numParticles);
@@ -314,7 +308,7 @@ public class ClaudeWindParticles : MonoBehaviour
 
 	public void DisableAllLayers()
 	{
-		foreach(var (elevation, objec) in elevationDict)
+		foreach(var objec in elevationDict)
 		{
 			objec.enableUpdates = false;
 		}
@@ -322,7 +316,7 @@ public class ClaudeWindParticles : MonoBehaviour
 
 	public void EnableAllLayers()
 	{
-		foreach (var (elevation, objec) in elevationDict)
+		foreach (var objec in elevationDict)
 		{
 			objec.enableUpdates = true;
 		}

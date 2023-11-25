@@ -16,8 +16,8 @@ struct Boundary {
 	float2 uv;
 };
 
-//Texture2D<float2> WindMap
-//SamplerState my_linear_repeat_sampler;
+Texture2D<float2> WindDataTexture;
+SamplerState my_linear_repeat_sampler;
 
 RWStructuredBuffer<Particle> Particles;
 uint numParticles;
@@ -95,9 +95,15 @@ Boundary getClosestBoundary(float3 p) {
 }
 
 float3 getBoundaryVector(float3 p) {
-	Boundary boundary = getClosestBoundary(p);
-	float2 f = float2(boundary.uv);
+	//Boundary boundary = getClosestBoundary(p);
+
 	float2 longLat = pointToLongitudeLatitude(normalize(p));
+	float2 uv = longitudeLatitudeToUV(longLat);
+	float2 f = WindDataTexture.SampleLevel(my_linear_repeat_sampler, uv, 0).rg;
+	f = (f.x, f.y);
+
+	//float2 f = float2(boundary.uv);
+	//float2 longLat = pointToLongitudeLatitude(normalize(p));
 	float3 p2 = longitudeLatitudeToPoint(longLat + normalize(f) * 0.001);
 	return normalize(p2 - p) * length(f);
 }

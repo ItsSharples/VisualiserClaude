@@ -76,7 +76,25 @@ public class claudeReader : MonoBehaviour
 	public Dictionary<float, RenderTexture> TextureDictionary { get; private set; }
 	public List<float> elevationLookup;
 	public uint numBoundaries;
+	public int boundaryCount;
 	public int elevationCount;
+
+	public IEnumerable<float> GetElevations()
+	{
+		for (int i = 0; i < elevationLookup.Count; i++)
+		{
+			yield return elevationLookup[i];
+		}
+	}
+	public IEnumerable<int> GetLayers()
+	{
+		for (int i = 0; i < elevationLookup.Count; i++)
+		{
+			yield return i;
+		}
+	}
+
+
 	public RenderTexture WindTextureForLayer(int layer)
 	{
 		// If the layer is in the valid range
@@ -205,14 +223,14 @@ public class claudeReader : MonoBehaviour
 				case "v":
 					for (int boundary_index = 0; boundary_index < value[0].Count(); boundary_index++)
 					{
-						var u_speeds = new List<float>();
+						var v_speeds = new List<float>();
 						for (int elevation_index = 0; elevation_index < value.Count(); elevation_index++)
 						{
-							u_speeds.Add((float)value[elevation_index][boundary_index]);
+							v_speeds.Add((float)value[elevation_index][boundary_index]);
 						}
 
 						var boundary = boundaries.GetValueOrDefault(boundary_index, new claudeBoundary());
-						boundary.v = u_speeds.ToArray();
+						boundary.v = v_speeds.ToArray();
 						boundaries[boundary_index] = boundary;
 					}
 					break;
@@ -273,6 +291,7 @@ public class claudeReader : MonoBehaviour
 			temp.index = i;
 			boundaries[i] = temp;
 		}
+		boundaryCount = boundaries[0].u.Length;
 
 		Debug.Log($"Boundary Count: {boundaries.Count}\nPixel Count: {pixels.Count}");
 		foreach (var (index, pixel) in pixels)
@@ -285,16 +304,6 @@ public class claudeReader : MonoBehaviour
 		foreach (var (index, pixel) in pixels)
 		{
 			pixelPoints.Add(new Vector4(pixel.latitude, pixel.longitude, pixel.index, pixel.ground_temp));
-
-			//pixelPoints.Add(new Vector4(pixel.latitude, pixel.longitude + 2 * Mathf.PI, pixel.index, pixel.ground_temp));
-			//pixelPoints.Add(new Vector4(pixel.latitude, pixel.longitude - 2 * Mathf.PI, pixel.index, pixel.ground_temp));
-			//pixelPoints.Add(new Vector4(pixel.latitude + Mathf.PI, pixel.longitude, pixel.index, pixel.ground_temp));
-			//pixelPoints.Add(new Vector4(pixel.latitude - Mathf.PI, pixel.longitude, pixel.index, pixel.ground_temp));
-
-			//pixelPoints.Add(new Vector4(pixel.latitude + Mathf.PI, pixel.longitude - 2 * Mathf.PI, pixel.index, pixel.ground_temp));
-			//pixelPoints.Add(new Vector4(pixel.latitude - Mathf.PI, pixel.longitude - 2 * Mathf.PI, pixel.index, pixel.ground_temp));
-			//pixelPoints.Add(new Vector4(pixel.latitude + Mathf.PI, pixel.longitude + 2 * Mathf.PI, pixel.index, pixel.ground_temp));
-			//pixelPoints.Add(new Vector4(pixel.latitude - Mathf.PI, pixel.longitude + 2 * Mathf.PI, pixel.index, pixel.ground_temp));
 		}
 
 
@@ -310,16 +319,6 @@ public class claudeReader : MonoBehaviour
 			data.latitude = boundary.latitude;
 			data.longitude = boundary.longitude;
 			boundaryPoints.Add(data);
-			//data.longitude = boundary.longitude + 2 * Mathf.PI;
-			//boundaryPoints.Add(data);
-			//data.longitude = boundary.longitude - 2 * Mathf.PI;
-			//boundaryPoints.Add(data);
-
-			//data.longitude = boundary.longitude;
-			//data.latitude = boundary.latitude + Mathf.PI;
-			//boundaryPoints.Add(data);
-			//data.latitude = boundary.latitude - Mathf.PI;
-			//boundaryPoints.Add(data);
 		}
 
 
@@ -331,64 +330,81 @@ public class claudeReader : MonoBehaviour
 		var format = UnityEngine.Experimental.Rendering.GraphicsFormat.R32G32B32A32_SFloat;
 
 		RenderTexture outTexture;
-		outTexture = ComputeHelper.CreateRenderTexture(width, height, FilterMode.Bilinear, format, "SDF Map");
+		outTexture = ComputeHelper.CreateRenderTexture(width, height, FilterMode.Bilinear, format, "SDF Temperature Map");
 		outTexture.wrapMode = TextureWrapMode.Repeat;
 
 
 		Debug.Log("Rendering");
-		/*
-		var blankKernel = windCompute.FindKernel("CSBlankTexture");
-		windCompute.SetTexture(blankKernel, "OutTexture", outTexture);
-		ComputeHelper.Dispatch(windCompute, outTexture, kernelIndex: blankKernel); // Blank Texture
-		*/
-		var mainKernel = windCompute.FindKernel("CSMain");
+		var windspeedKernel = windCompute.FindKernel("GenerateTextureWindspeed");
+		var temperatureKernel = windCompute.FindKernel("GenerateTextureTemperature");
 
 		windCompute.SetInt("width", width);
 		windCompute.SetInt("height", height);
 
 		windCompute.SetInt("pixel_count", pixelPoints.Count);
 		windCompute.SetInt("boundary_count", boundaryPoints.Count);
-		windCompute.SetTexture(mainKernel, "OutTexture", outTexture);
-		windCompute.SetBuffer(mainKernel, "Pixels", pixelBuffer);
-		windCompute.SetBuffer(mainKernel, "Boundaries", boundaryBuffer);
+		windCompute.SetTexture(temperatureKernel, "OutTexture", outTexture);
+		windCompute.SetBuffer(temperatureKernel, "Pixels", pixelBuffer);
+		windCompute.SetBuffer(temperatureKernel, "Boundaries", boundaryBuffer);
 
-		
-		ComputeHelper.Dispatch(windCompute, width, height, pixelBuffer.count, kernelIndex: mainKernel); // Set Data
+		ComputeHelper.Dispatch(windCompute, width, height, pixelBuffer.count, kernelIndex: temperatureKernel); // Set Data
 		pixelBuffer.Release();
 		boundaryBuffer.Release();
 		Debug.Log("Rendered!");
 
 		texture = outTexture;
+		groundTexture = texture;
 
 		elevationLookup = new List<float>();
 		TextureDictionary = new Dictionary<float, RenderTexture>();
 		BufferDictionary = new Dictionary<float, ComputeBuffer>();
 
-		TextureDictionary[1] = texture;
+		//TextureDictionary[0] = outTexture;
 
 		for (int i = 0; i < elevationCount; i++)
 		{
-			var bufferBoundaries = new List<Boundary>();
+			var bufferBoundaries = new List<boundaryData>();
 			foreach (var (index, boundary) in boundaries) {
-				var bound = new Boundary();
+				var bound = new boundaryData();
 
-				bound.index = boundary.index;
-				bound.elevationIndex = i;
-				bound.longlat = new Vector2(boundary.longitude, boundary.latitude);
-				bound.uv = new Vector2(boundary.u[bound.elevationIndex], boundary.v[bound.elevationIndex]);
+				bound.index = (uint) boundary.index;
+				bound.elevationIndex = (uint)i;
+				bound.longitude = boundary.longitude;
+				bound.latitude = boundary.latitude;
+				bound.u = boundary.u[bound.elevationIndex];
+				bound.v = boundary.v[bound.elevationIndex];
 
 				bufferBoundaries.Add(bound);
 			}
-			var boundariesBuffer = ComputeHelper.CreateStructuredBuffer<Boundary>(bufferBoundaries.ToArray());
+			var boundariesBuffer = ComputeHelper.CreateStructuredBuffer(bufferBoundaries.ToArray());
 
-			BufferDictionary[i+1] = boundariesBuffer;
+			BufferDictionary[i] = boundariesBuffer;
 		}
-		numBoundaries = (uint)BufferDictionary[1].count;
+		numBoundaries = (uint)BufferDictionary[0].count;
 
+
+		pixelBuffer = ComputeHelper.CreateStructuredBuffer(pixelPoints.ToArray());
 		foreach (var (elevation, buffer) in BufferDictionary)
 		{
 			elevationLookup.Add(elevation);
+
+			outTexture = ComputeHelper.CreateRenderTexture(width, height, FilterMode.Bilinear, format, "SDF WindSpeed Map");
+
+			windCompute.SetInt("width", width);
+			windCompute.SetInt("height", height);
+
+			windCompute.SetInt("pixel_count", pixelPoints.Count);
+			windCompute.SetInt("boundary_count", boundaryPoints.Count);
+			windCompute.SetTexture(windspeedKernel, "OutTexture", outTexture);
+			windCompute.SetBuffer(windspeedKernel, "Pixels", pixelBuffer);
+			windCompute.SetBuffer(windspeedKernel, "Boundaries", buffer);
+
+			ComputeHelper.Dispatch(windCompute, width, height, buffer.count, kernelIndex: windspeedKernel); // Set Data
+
+			TextureDictionary[elevation] = outTexture;
 		}
+		
+		pixelBuffer.Release();
 	}
 
     public void UpdateMaterials()
@@ -399,7 +415,7 @@ public class claudeReader : MonoBehaviour
 		}
 	}
 
-	void OnDestroy()
+	private void OnDisable()
 	{
 		if (TextureDictionary != null)
 		{
