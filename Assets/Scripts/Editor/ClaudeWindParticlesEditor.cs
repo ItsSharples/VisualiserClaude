@@ -16,9 +16,9 @@ class ClaudeWindParticlesEditor : Editor
 		var obj = target as ClaudeWindParticles;
 		base.OnInspectorGUI();
 
-		if (GUILayout.Button("Update Data"))
+		if (GUILayout.Button("Reload Data"))
 		{
-			obj.rebuildBuffers(true);
+			obj.rebuildBuffers(false);
 		}
 
 		if (obj.elevationDict != null)

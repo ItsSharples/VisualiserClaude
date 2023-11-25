@@ -14,7 +14,7 @@ class claudeReaderEditor : Editor
 		var obj = target as claudeReader;
 		base.OnInspectorGUI();
 
-		if (GUILayout.Button("Update Data"))
+		if (GUILayout.Button("Load Data"))
 		{
 			obj.UpdateData();
 		}
