@@ -96,7 +96,7 @@ Boundary getClosestBoundary(float3 p) {
 
 float3 getBoundaryVector(float3 p) {
 	Boundary boundary = getClosestBoundary(p);
-	float2 f = float2(boundary.uv);
+	float2 f = -1.0f * float2(boundary.uv);
 	float2 longLat = pointToLongitudeLatitude(normalize(p));
 	float3 p2 = longitudeLatitudeToPoint(longLat + normalize(f) * 0.001);
 	return normalize(p2 - p) * length(f);
