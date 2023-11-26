@@ -66,17 +66,24 @@ internal struct WindData
 public class claudeReader : MonoBehaviour
 {
 	public ComputeShader generationCompute;
+	[DoNotSerialize]
 	public RenderTexture texture;
 	public MeshRenderer globe;
 
     public string filePath;
 	public TextAsset jsonAsset;
 
+	[DoNotSerialize]
 	public Vector2 extremityGroundTemp;
+	[DoNotSerialize]
 	public Dictionary<float, ComputeBuffer> BufferDictionary { get; private set; }
+	[DoNotSerialize]
 	public Dictionary<float, RenderTexture> TextureDictionary { get; private set; }
+	[DoNotSerialize]
 	public List<float> elevationLookup;
+	[DoNotSerialize]
 	public uint numBoundaries;
+	[DoNotSerialize]
 	public int elevationCount;
 
 	public float currentElevation { get; private set; }
@@ -331,7 +338,7 @@ public class claudeReader : MonoBehaviour
 		var format = UnityEngine.Experimental.Rendering.GraphicsFormat.R32G32B32A32_SFloat;
 
 		RenderTexture outTexture;
-		outTexture = ComputeHelper.CreateRenderTexture(width, height, FilterMode.Bilinear, format, "SDF Map");
+		outTexture = ComputeHelper.CreateRenderTexture(width, height, FilterMode.Bilinear, format, $"Ground Temperature ({jsonAsset.name})");
 		outTexture.wrapMode = TextureWrapMode.Repeat;
 
 

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: GlobalConfig
   m_EditorClassIdentifier: 
   heightScale: 1
-  particleScale: 2
+  particleScale: 1
   particleColour: {r: 1, g: 1, b: 1, a: 1}

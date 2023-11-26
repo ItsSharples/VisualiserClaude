@@ -100,10 +100,10 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _MaxTemp: 376
+    - _MaxTemp: 382
     - _MaxWind: 0
     - _Metallic: 0
-    - _MinTemp: 256
+    - _MinTemp: 264
     - _Mode: 0
     - _OcclusionStrength: 1
     - _OverlayStr: 0
