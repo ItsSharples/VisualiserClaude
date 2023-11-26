@@ -64,7 +64,7 @@ Boundary getClosestBoundary(float3 p) {
 
 float3 getBoundaryVector(float3 p) {
 	const float deltaLongLat = 0.001f;
-	float2 modifier = float2(-1.0f, 1.0f);
+	float2 modifier = float2(1.0f, -1.0f);
 	Boundary boundary = getClosestBoundary(p);
 	// Wind Speed
 	float2 windSpeed = modifier * float2(boundary.u, boundary.v);
