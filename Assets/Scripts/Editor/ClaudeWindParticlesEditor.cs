@@ -23,8 +23,8 @@ class ClaudeWindParticlesEditor : Editor
 		var obj = target as ClaudeWindParticles;
 		base.OnInspectorGUI();
 
-		// Visualise the Global Config
 		EditorGUILayout.Space();
+		// Visualise the Global Config
 		EditorGUILayout.LabelField("Global Config", EditorStyles.boldLabel);
 		var editor = Editor.CreateEditor(obj.globalConfig);
 		var root = editor.CreateInspectorGUI();
