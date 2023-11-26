@@ -49,15 +49,18 @@ public class ClaudeWindParticles : MonoBehaviour
 	int numBuffers;
 	int numLayers;
 
-	void Start()
+
+	void fetchElevationComponents()
 	{
 		elevationDict = new Dictionary<float, ClaudeElevation>();
-		//dictionaryParticleBuffers = new Dictionary<float, ComputeBuffer>();
-
 		foreach (var elevation in GetComponentsInParent<ClaudeElevation>())
 		{
 			elevationDict.Add(elevation.elevation, elevation);
 		}
+	}
+	void Start()
+	{
+		fetchElevationComponents();
 
 		rebuildBuffers();
 
@@ -130,11 +133,12 @@ public class ClaudeWindParticles : MonoBehaviour
 				//Debug.Log(elevationDict.Keys.Count);
 				ClaudeElevation elevationObject;
 
+
+				if (elevationDict == null) { fetchElevationComponents(); }
+
 				if (elevationDict.TryGetValue(elevation, out elevationObject))
 				{
 					elevationObject.Rebuild(ref instanceShader, (uint)numParticles, reader.GetBoundariesForElevation(elevation));
-					//elevationObject.boundaryBuffer = ;
-					//elevationObject.texture = reader.WindTextureForElevation(elevation);
 				}
 				else
 				{

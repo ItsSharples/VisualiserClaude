@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: DefaultCamera
   m_EditorClassIdentifier: 
   latitude: 0
-  longitude: 2.51
+  longitude: 0.79
   altitude: 2.5

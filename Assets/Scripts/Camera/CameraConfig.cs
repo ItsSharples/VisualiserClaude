@@ -21,7 +21,7 @@ public class CameraConfig : ScriptableObject
 	public float altitude;
 
     private float adjusted_lat => mappedLatitude;
-    private float adjusted_lon => mappedLongitude - Mathf.PI;
+    private float adjusted_lon => mappedLongitude;
 
 	private float cos(float x) => Mathf.Cos(x);
 	private float sin(float x) => Mathf.Sin(x);

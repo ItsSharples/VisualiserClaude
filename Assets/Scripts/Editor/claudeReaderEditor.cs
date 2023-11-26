@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -12,7 +13,39 @@ class claudeReaderEditor : Editor
 	public override void OnInspectorGUI()
 	{
 		var obj = target as claudeReader;
-		base.OnInspectorGUI();
+
+		
+		if (!obj.ShowDebugValues)
+		{
+			var computeProperty = serializedObject.FindProperty(nameof(obj.generationCompute));
+			var textureProperty = serializedObject.FindProperty(nameof(obj.texture));
+			var globeProperty = serializedObject.FindProperty(nameof(obj.globe));
+			var textProperty = serializedObject.FindProperty(nameof(obj.jsonAsset));
+			var debugProperty = serializedObject.FindProperty(nameof(obj.ShowDebugValues));
+
+			
+			EditorGUILayout.PropertyField(textProperty);
+			GUILayout.Space(EditorGUIUtility.singleLineHeight * 0.5f);
+			GUILayout.Label("Properties", EditorStyles.boldLabel);
+			EditorGUILayout.PropertyField(computeProperty);
+			EditorGUILayout.PropertyField(textureProperty);
+			EditorGUILayout.PropertyField(globeProperty);	
+
+			EditorGUILayout.PropertyField(debugProperty);
+
+			if (serializedObject.hasModifiedProperties)
+			{
+				serializedObject.ApplyModifiedProperties();
+			}
+		}
+		else
+		{
+			base.OnInspectorGUI();
+		}
+
+		
+
+		
 
 		if (GUILayout.Button("Load Data"))
 		{
