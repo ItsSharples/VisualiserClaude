@@ -33,6 +33,13 @@ class claudeReaderEditor : Editor
 
 			EditorGUILayout.PropertyField(debugProperty);
 
+			var Tau = 2 * Mathf.PI;
+			var currentOffset = obj.globe.sharedMaterial.mainTextureOffset * Tau;
+			var newOffsetX = EditorGUILayout.Slider("Ground Texture Rotation", currentOffset.x, -Tau, Tau);
+			currentOffset.x = newOffsetX / Tau;
+			obj.globe.sharedMaterial.mainTextureOffset = currentOffset;
+
+
 			if (serializedObject.hasModifiedProperties)
 			{
 				serializedObject.ApplyModifiedProperties();
