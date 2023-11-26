@@ -12,4 +12,18 @@ public class ElevationConfig : ScriptableObject
 	public float particleScale = 2f;
 	internal float stretch = 0;
 	public Color particleColour = Color.white;
+
+
+	public ElevationConfig ModifiedBy(ElevationConfig other)
+	{
+		var duplicate = Instantiate(this);
+		if(other == null) { return duplicate; }
+
+		duplicate.heightScale *= other.heightScale;
+		duplicate.particleScale *= other.particleScale;
+		duplicate.stretch *= other.stretch;
+		duplicate.particleColour *= other.particleColour;
+
+		return duplicate;
+	}
 }

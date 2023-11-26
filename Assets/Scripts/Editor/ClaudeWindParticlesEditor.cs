@@ -23,7 +23,14 @@ class ClaudeWindParticlesEditor : Editor
 		var obj = target as ClaudeWindParticles;
 		base.OnInspectorGUI();
 
-		
+		// Visualise the Global Config
+		EditorGUILayout.Space();
+		EditorGUILayout.LabelField("Global Config", EditorStyles.boldLabel);
+		var editor = Editor.CreateEditor(obj.globalConfig);
+		var root = editor.CreateInspectorGUI();
+		editor.OnInspectorGUI();
+
+		EditorGUILayout.Space();
 		// Enable/Disable Elevations
 		if (obj.elevationDict != null)
 		{
@@ -91,7 +98,6 @@ class ClaudeWindParticlesEditor : Editor
 			}
 			tryToggleAll = false;
 			dontUpdate = false;
-
 		}
 
 		if (GUILayout.Button("Reload Data"))

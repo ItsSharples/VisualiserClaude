@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
 using UnityEditor;
@@ -20,11 +21,9 @@ public class ClaudeWindParticles : MonoBehaviour
 	[Header("Settings")]
 	public int numParticles = 100000;
 
-	//int numLayers => FindObjectOfType<LayeredWindReader>().TextureCount;
-	//bool move;
-	public float globalScale = 1.0f;
+	[HideInInspector]
+	public ElevationConfig globalConfig;
 	public float duration;
-	//float stretch = 0;
 	public float timeScale = 1;
 
 	//public float[] heights;
@@ -58,8 +57,17 @@ public class ClaudeWindParticles : MonoBehaviour
 			elevationDict.Add(elevation.elevation, elevation);
 		}
 	}
+	private void Awake()
+	{
+		if (globalConfig == null)
+		{
+			globalConfig = ScriptableObject.CreateInstance<ElevationConfig>();
+		}
+	}
 	void Start()
 	{
+		
+
 		fetchElevationComponents();
 
 		rebuildBuffers();
@@ -204,8 +212,6 @@ public class ClaudeWindParticles : MonoBehaviour
 				{
 					UpdateElevation(elevationObject);// Update(elevation: elevation);
 
-					elevationObject.particleMaterial.SetFloat("size", elevationObject.config.particleScale * globalScale);
-					
 					Graphics.DrawMeshInstancedIndirect(mesh, 0, elevationObject.particleMaterial, bounds, argsBuffer);
 				}
 			}
@@ -225,7 +231,7 @@ public class ClaudeWindParticles : MonoBehaviour
 	}
 	void UpdateElevation(ClaudeElevation elevation)
 	{
-		elevation.ActivateMaterial();
+		elevation.ActivateMaterial(globalConfig);
 		
 		ComputeHelper.AssignBuffer(compute, elevation.particleBuffer, "Particles", initKernel, updateKernel);
 		ComputeHelper.AssignBuffer(compute, elevation.boundaryBuffer, "Boundaries", initKernel, updateKernel);

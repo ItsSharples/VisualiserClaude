@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -57,15 +58,17 @@ public class ClaudeElevation : MonoBehaviour
 	//	ComputeHelper.AssignBuffer(compute, particleBuffer, "Particles", initKernel, updateKernel);
 	//	ComputeHelper.AssignTexture(compute, texture, "WindMap", initKernel, updateKernel);
 	//}
-	public void ActivateMaterial()
+	public void ActivateMaterial(ElevationConfig globalModifier)
 	{
+		var modifiedConfig = config.ModifiedBy(globalModifier);
+
 		particleMaterial.SetBuffer("Particles", particleBuffer);
 		particleMaterial.SetBuffer("Boundaries", boundaryBuffer);
-		particleMaterial.SetFloat("size", config.particleScale);
-		particleMaterial.SetFloat("stretch", config.stretch);
+		particleMaterial.SetFloat("size", modifiedConfig.particleScale);
+		particleMaterial.SetFloat("stretch", modifiedConfig.stretch);
 
-		particleMaterial.SetColor("_particleColour", config.particleColour);
-		particleMaterial.SetFloat("scale", 1 + config.heightScale * 0.01f);
+		particleMaterial.SetColor("_particleColour", modifiedConfig.particleColour);
+		particleMaterial.SetFloat("scale", 1 + modifiedConfig.heightScale * 0.01f);
 
 	}
 
